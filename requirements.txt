@@ -1,0 +1,25 @@
+# HybridRAG-Eval - Python 3.10 / 3.11 recommended
+# Tip: run `pip freeze > requirements-lock.txt` after a successful install to pin exact versions.
+
+# --- Document ingestion ---
+pypdf
+python-docx
+
+# --- Retrieval (vector + keyword) and reranking ---
+numpy
+torch
+sentence-transformers      # MiniLM embeddings + cross-encoder reranker
+faiss-cpu                  # vector index
+rank-bm25                  # keyword search
+nltk                       # Porter stemmer for BM25 tokenisation
+scikit-learn               # English stop-word list
+
+# --- LLM generation and judging ---
+google-genai               # Google Gemini API
+python-dotenv              # loads the API key from .env
+requests                   # OpenAI-compatible providers (Groq, OpenRouter, Ollama), corpus download
+
+# --- Evaluation and reporting ---
+pandas
+matplotlib
+tqdm
