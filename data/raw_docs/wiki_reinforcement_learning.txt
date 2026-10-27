@@ -1,0 +1,1901 @@
+Reinforcement learning
+
+In machine learning and optimal control, reinforcement learning (RL) (also known as approximate dynamic programming) is concerned with how an intelligent agent should take actions in a dynamic environment in order to maximize a reward signal. Reinforcement learning is one of the three basic machine learning paradigms, alongside supervised learning and unsupervised learning.
+While supervised learning and unsupervised learning algorithms respectively attempt to discover patterns in labeled and unlabeled data, reinforcement learning involves training an agent through interactions with its environment. To learn to maximize rewards from these interactions, the agent makes decisions between trying new actions to learn more about the environment (exploration), or using current knowledge of the environment to take the best action (exploitation). The search for the optimal balance between these two strategies is known as the exploration–exploitation dilemma.
+
+The environment is typically stated in the form of a Markov decision process, as many reinforcement learning algorithms use dynamic programming techniques. The main difference between classical dynamic programming methods and reinforcement learning algorithms is that the latter do not assume knowledge of an exact mathematical model of the Markov decision process, and they target large Markov decision processes where exact methods become infeasible. 
+
+
+== Principles ==
+Due to its generality, reinforcement learning is studied in many disciplines, such as game theory, control theory, operations research, information theory, simulation-based optimization, multi-agent systems, swarm intelligence, and statistics. In the operations research and control literature, RL is called approximate dynamic programming, or neuro-dynamic programming. The problems of interest in RL have also been studied in the theory of optimal control, which is concerned mostly with the existence and characterization of optimal solutions, and algorithms for their exact computation, and less with learning or approximation (particularly in the absence of a mathematical model of the environment).
+Basic reinforcement learning is modeled as a Markov decision process:
+
+A set of environment and agent states (the state space), 
+  
+    
+      
+        
+          
+            S
+          
+        
+      
+    
+    {\displaystyle {\mathcal {S}}}
+  
+;
+A set of actions (the action space), 
+  
+    
+      
+        
+          
+            A
+          
+        
+      
+    
+    {\displaystyle {\mathcal {A}}}
+  
+, of the agent;
+
+  
+    
+      
+        
+          P
+          
+            a
+          
+        
+        (
+        s
+        ,
+        
+          s
+          ′
+        
+        )
+        =
+        Pr
+        (
+        
+          S
+          
+            t
+            +
+            1
+          
+        
+        
+          =
+        
+        
+          s
+          ′
+        
+        ∣
+        
+          S
+          
+            t
+          
+        
+        
+          =
+        
+        s
+        ,
+        
+          A
+          
+            t
+          
+        
+        
+          =
+        
+        a
+        )
+      
+    
+    {\displaystyle P_{a}(s,s')=\Pr(S_{t+1}{=}s'\mid S_{t}{=}s,A_{t}{=}a)}
+  
+, the transition probability (at time 
+  
+    
+      
+        t
+      
+    
+    {\displaystyle t}
+  
+) from state 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+ to state 
+  
+    
+      
+        
+          s
+          ′
+        
+      
+    
+    {\displaystyle s'}
+  
+ under action 
+  
+    
+      
+        a
+      
+    
+    {\displaystyle a}
+  
+.
+
+  
+    
+      
+        
+          R
+          
+            a
+          
+        
+        (
+        s
+        ,
+        
+          s
+          ′
+        
+        )
+      
+    
+    {\displaystyle R_{a}(s,s')}
+  
+, the immediate reward after transitioning from 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+ to 
+  
+    
+      
+        
+          s
+          ′
+        
+      
+    
+    {\displaystyle s'}
+  
+ under action 
+  
+    
+      
+        a
+      
+    
+    {\displaystyle a}
+  
+.
+The purpose of reinforcement learning is for the agent to learn an optimal (or near-optimal) policy that maximizes the reward function or other user-provided reinforcement signal that accumulates from immediate rewards. This is similar to processes that appear to occur in animal psychology. For example, biological brains are hardwired to interpret signals such as pain and hunger as negative reinforcements, and interpret pleasure and food intake as positive reinforcements. In some circumstances, animals learn to adopt behaviors that optimize these rewards. This suggests that animals are capable of reinforcement learning.
+A basic reinforcement learning agent interacts with its environment in discrete time steps. At each time step t, the agent receives the current state 
+  
+    
+      
+        
+          S
+          
+            t
+          
+        
+      
+    
+    {\displaystyle S_{t}}
+  
+ and reward 
+  
+    
+      
+        
+          R
+          
+            t
+          
+        
+      
+    
+    {\displaystyle R_{t}}
+  
+. It then chooses an action 
+  
+    
+      
+        
+          A
+          
+            t
+          
+        
+      
+    
+    {\displaystyle A_{t}}
+  
+ from the set of available actions, which is subsequently sent to the environment. The environment moves to a new state 
+  
+    
+      
+        
+          S
+          
+            t
+            +
+            1
+          
+        
+      
+    
+    {\displaystyle S_{t+1}}
+  
+ and the reward 
+  
+    
+      
+        
+          R
+          
+            t
+            +
+            1
+          
+        
+      
+    
+    {\displaystyle R_{t+1}}
+  
+ associated with the transition 
+  
+    
+      
+        (
+        
+          S
+          
+            t
+          
+        
+        ,
+        
+          A
+          
+            t
+          
+        
+        ,
+        
+          S
+          
+            t
+            +
+            1
+          
+        
+        )
+      
+    
+    {\displaystyle (S_{t},A_{t},S_{t+1})}
+  
+ is determined. The goal of a reinforcement learning agent is to learn a policy:
+
+  
+    
+      
+        
+          
+            
+              
+              
+                π
+                :
+                
+                  
+                    S
+                  
+                
+                ×
+                
+                  
+                    A
+                  
+                
+                →
+                [
+                0
+                ,
+                1
+                ]
+              
+            
+            
+              
+              
+                π
+                (
+                s
+                ,
+                a
+                )
+                =
+                Pr
+                (
+                
+                  A
+                  
+                    t
+                  
+                
+                
+                  =
+                
+                a
+                ∣
+                
+                  S
+                  
+                    t
+                  
+                
+                
+                  =
+                
+                s
+                )
+              
+            
+          
+        
+      
+    
+    {\displaystyle {\begin{aligned}&\pi :{\mathcal {S}}\times {\mathcal {A}}\to [0,1]\\&\pi (s,a)=\Pr(A_{t}{=}a\mid S_{t}{=}s)\end{aligned}}}
+  
+
+that maximizes the expected cumulative reward.
+Formulating the problem as a Markov decision process assumes the agent directly observes the current environmental state; in this case, the problem is said to have full observability. If the agent only has access to a subset of states, or if the observed states are corrupted by noise, the agent is said to have partial observability, and formally the problem must be formulated as a partially observable Markov decision process. In both cases, the set of actions available to the agent can be restricted. For example, the state of an account balance could be restricted to be positive; if the current value of the state is 3 and the state transition attempts to reduce the value by 4, the transition will not be allowed.
+When the agent's performance is compared to that of an agent that acts optimally, the difference in performance yields the notion of regret. In order to act near optimally, the agent must reason about long-term consequences of its actions (i.e., maximize future rewards), although the immediate reward associated with this might be negative.
+Thus, reinforcement learning is particularly well-suited to problems that include a long-term versus short-term reward trade-off. It has been applied successfully to various problems, including energy storage, robot control, photovoltaic generators, backgammon, checkers, Go (AlphaGo), and autonomous driving systems.
+Two elements make reinforcement learning powerful: the use of samples to optimize performance, and the use of function approximation to deal with large environments. Thanks to these two key components, RL can be used in large environments in the following situations:
+
+A model of the environment is known, but an analytic solution is not available;
+Only a simulation model of the environment is given (the subject of simulation-based optimization);
+The only way to collect information about the environment is to interact with it.
+The first two of these problems could be considered planning problems (since some form of model is available), while the last one could be considered to be a genuine learning problem. However, reinforcement learning converts both planning problems to machine learning problems.
+
+
+== Exploration ==
+The trade-off between exploration and exploitation has been most thoroughly studied through the multi-armed bandit problem and for finite state space Markov decision processes in Burnetas and Katehakis (1997).
+Reinforcement learning requires clever exploration mechanisms; randomly selecting actions, without reference to an estimated probability distribution, shows poor performance. The case of (small) finite Markov decision processes is relatively well understood. However, due to the lack of algorithms that scale well with the number of states (or scale to problems with infinite state spaces), simple exploration methods are the most practical.
+One such method is 
+  
+    
+      
+        ε
+      
+    
+    {\displaystyle \varepsilon }
+  
+-greedy, where 
+  
+    
+      
+        0
+        <
+        ε
+        <
+        1
+      
+    
+    {\displaystyle 0<\varepsilon <1}
+  
+ is a parameter controlling the amount of exploration vs. exploitation. With probability 
+  
+    
+      
+        1
+        −
+        ε
+      
+    
+    {\displaystyle 1-\varepsilon }
+  
+, exploitation is chosen, and the agent chooses the action that it believes has the best long-term effect (ties between actions are broken uniformly at random). Alternatively, with probability 
+  
+    
+      
+        ε
+      
+    
+    {\displaystyle \varepsilon }
+  
+, exploration is chosen, and the action is chosen uniformly at random. 
+  
+    
+      
+        ε
+      
+    
+    {\displaystyle \varepsilon }
+  
+ is usually a fixed parameter but can be adjusted either according to a schedule (making the agent explore progressively less), or adaptively based on heuristics.
+
+
+== Algorithms for control learning ==
+Even if the issue of exploration is disregarded and even if the state was observable (assumed hereafter), the problem remains to use past experience to find out which actions lead to higher cumulative rewards.
+
+
+=== Criterion of optimality ===
+
+
+==== Policy ====
+The agent's action selection is modeled as a map called policy:
+
+  
+    
+      
+        
+          
+            
+              
+              
+                π
+                :
+                
+                  
+                    A
+                  
+                
+                ×
+                
+                  
+                    S
+                  
+                
+                →
+                [
+                0
+                ,
+                1
+                ]
+              
+            
+            
+              
+              
+                π
+                (
+                a
+                ,
+                s
+                )
+                =
+                Pr
+                (
+                
+                  A
+                  
+                    t
+                  
+                
+                
+                  =
+                
+                a
+                ∣
+                
+                  S
+                  
+                    t
+                  
+                
+                
+                  =
+                
+                s
+                )
+              
+            
+          
+        
+      
+    
+    {\displaystyle {\begin{aligned}&\pi :{\mathcal {A}}\times {\mathcal {S}}\to [0,1]\\&\pi (a,s)=\Pr(A_{t}{=}a\mid S_{t}{=}s)\end{aligned}}}
+  
+
+The policy map gives the probability of taking action 
+  
+    
+      
+        a
+      
+    
+    {\displaystyle a}
+  
+ when in state 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+. There are also deterministic policies  
+  
+    
+      
+        π
+      
+    
+    {\displaystyle \pi }
+  
+ for which 
+  
+    
+      
+        π
+        (
+        s
+        )
+      
+    
+    {\displaystyle \pi (s)}
+  
+ denotes the action that should be played at state 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+.
+
+
+==== State-value function ====
+The state-value function 
+  
+    
+      
+        
+          V
+          
+            π
+          
+        
+        (
+        s
+        )
+      
+    
+    {\displaystyle V_{\pi }(s)}
+  
+ is defined as, expected discounted return starting with state 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+, i.e. 
+  
+    
+      
+        
+          S
+          
+            0
+          
+        
+        =
+        s
+      
+    
+    {\displaystyle S_{0}=s}
+  
+, and successively following policy 
+  
+    
+      
+        π
+      
+    
+    {\displaystyle \pi }
+  
+. Hence, roughly speaking, the value function estimates "how good" it is to be in a given state.
+
+  
+    
+      
+        
+          V
+          
+            π
+          
+        
+        (
+        s
+        )
+        =
+        
+          
+            E
+          
+        
+        ⁡
+        [
+        G
+        ∣
+        
+          S
+          
+            0
+          
+        
+        
+          =
+        
+        s
+        ]
+        =
+        
+          
+            E
+          
+        
+        ⁡
+        
+          [
+          
+            
+              ∑
+              
+                t
+                =
+                0
+              
+              
+                ∞
+              
+            
+            
+              γ
+              
+                t
+              
+            
+            
+              R
+              
+                t
+                +
+                1
+              
+            
+            ∣
+            
+              S
+              
+                0
+              
+            
+            
+              =
+            
+            s
+          
+          ]
+        
+        ,
+      
+    
+    {\displaystyle V_{\pi }(s)=\operatorname {\mathbb {E} } [G\mid S_{0}{=}s]=\operatorname {\mathbb {E} } \left[\sum _{t=0}^{\infty }\gamma ^{t}R_{t+1}\mid S_{0}{=}s\right],}
+  
+
+where the random variable 
+  
+    
+      
+        G
+      
+    
+    {\displaystyle G}
+  
+ denotes the discounted return, and is defined as the sum of future discounted rewards:
+
+  
+    
+      
+        G
+        =
+        
+          ∑
+          
+            t
+            =
+            0
+          
+          
+            ∞
+          
+        
+        
+          γ
+          
+            t
+          
+        
+        
+          R
+          
+            t
+            +
+            1
+          
+        
+        =
+        
+          R
+          
+            1
+          
+        
+        +
+        γ
+        
+          R
+          
+            2
+          
+        
+        +
+        
+          γ
+          
+            2
+          
+        
+        
+          R
+          
+            3
+          
+        
+        +
+        ⋯
+        ,
+      
+    
+    {\displaystyle G=\sum _{t=0}^{\infty }\gamma ^{t}R_{t+1}=R_{1}+\gamma R_{2}+\gamma ^{2}R_{3}+\cdots ,}
+  
+
+where 
+  
+    
+      
+        
+          R
+          
+            t
+            +
+            1
+          
+        
+      
+    
+    {\displaystyle R_{t+1}}
+  
+ is the reward for transitioning from state 
+  
+    
+      
+        
+          S
+          
+            t
+          
+        
+      
+    
+    {\displaystyle S_{t}}
+  
+ to 
+  
+    
+      
+        
+          S
+          
+            t
+            +
+            1
+          
+        
+      
+    
+    {\displaystyle S_{t+1}}
+  
+, 
+  
+    
+      
+        0
+        ≤
+        γ
+        <
+        1
+      
+    
+    {\displaystyle 0\leq \gamma <1}
+  
+ is the discount rate. 
+  
+    
+      
+        γ
+      
+    
+    {\displaystyle \gamma }
+  
+ is less than 1, so rewards in the distant future are weighted less than rewards in the immediate future.
+The goal is to find a policy that maximizes the expected discounted return. From the theory of Markov decision processes it is known that, without loss of generality, the search can be restricted to the set of so-called stationary policies. A policy is stationary if the action-distribution returned by it depends only on the last state visited (from the observation agent's history). The search can be further restricted to deterministic stationary policies. A deterministic stationary policy deterministically selects actions based on the current state. Since any such policy can be identified with a mapping from the set of states to the set of actions, these policies can be identified with such mappings with no loss of generality.
+
+
+=== Brute force ===
+The brute force approach entails two steps:
+
+For each possible policy, sample returns while following it
+Choose the policy with the largest expected discounted return
+One problem with this is that the number of policies can be large, or even infinite. Another is that the variance of the returns may be large, which requires many samples to accurately estimate the discounted return of each policy.
+These problems can be ameliorated if we assume some structure and allow samples generated from one policy to influence the estimates made for others. The two main approaches for achieving this are value function estimation and direct policy search.
+
+
+=== Value function ===
+
+Value function approaches attempt to find a policy that maximizes the discounted return by maintaining a set of estimates of expected discounted returns 
+  
+    
+      
+        
+          
+            E
+          
+        
+        ⁡
+        [
+        G
+        ]
+      
+    
+    {\displaystyle \operatorname {\mathbb {E} } [G]}
+  
+ for some policy (usually either the "current" [on-policy] or the optimal [off-policy] one).
+These methods rely on the theory of Markov decision processes, where optimality is defined in a sense stronger than the one above: A policy is optimal if it achieves the best-expected discounted return from any initial state (i.e., initial distributions play no role in this definition). Again, an optimal policy can always be found among stationary policies.
+To define optimality in a formal manner, define the state-value of a policy 
+  
+    
+      
+        π
+      
+    
+    {\displaystyle \pi }
+  
+ by
+
+  
+    
+      
+        
+          V
+          
+            π
+          
+        
+        (
+        s
+        )
+        =
+        
+          
+            E
+          
+        
+        ⁡
+        [
+        G
+        ∣
+        s
+        ,
+        π
+        ]
+        ,
+      
+    
+    {\displaystyle V^{\pi }(s)=\operatorname {\mathbb {E} } [G\mid s,\pi ],}
+  
+
+where 
+  
+    
+      
+        G
+      
+    
+    {\displaystyle G}
+  
+ stands for the discounted return associated with following 
+  
+    
+      
+        π
+      
+    
+    {\displaystyle \pi }
+  
+ from the initial state 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+. Defining 
+  
+    
+      
+        
+          V
+          
+            ∗
+          
+        
+        (
+        s
+        )
+      
+    
+    {\displaystyle V^{*}(s)}
+  
+ as the maximum possible state-value of 
+  
+    
+      
+        
+          V
+          
+            π
+          
+        
+        (
+        s
+        )
+      
+    
+    {\displaystyle V^{\pi }(s)}
+  
+, where 
+  
+    
+      
+        π
+      
+    
+    {\displaystyle \pi }
+  
+ is allowed to change,
+
+  
+    
+      
+        
+          V
+          
+            ∗
+          
+        
+        (
+        s
+        )
+        =
+        
+          max
+          
+            π
+          
+        
+        
+          V
+          
+            π
+          
+        
+        (
+        s
+        )
+        .
+      
+    
+    {\displaystyle V^{*}(s)=\max _{\pi }V^{\pi }(s).}
+  
+
+A policy that achieves these optimal state-values in each state is called optimal. Clearly, a policy that is optimal in this sense is also optimal in the sense that it maximizes the expected discounted return, since 
+  
+    
+      
+        
+          V
+          
+            ∗
+          
+        
+        (
+        s
+        )
+        =
+        
+          max
+          
+            π
+          
+        
+        
+          E
+        
+        [
+        G
+        ∣
+        s
+        ,
+        π
+        ]
+      
+    
+    {\displaystyle V^{*}(s)=\max _{\pi }\mathbb {E} [G\mid s,\pi ]}
+  
+, where 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+ is a state randomly sampled from the distribution 
+  
+    
+      
+        μ
+      
+    
+    {\displaystyle \mu }
+  
+ of initial states (so 
+  
+    
+      
+        μ
+        (
+        s
+        )
+        =
+        Pr
+        (
+        
+          S
+          
+            0
+          
+        
+        =
+        s
+        )
+      
+    
+    {\displaystyle \mu (s)=\Pr(S_{0}=s)}
+  
+).
+Although state-values suffice to define optimality, it is useful to define action-values. Given a state 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+, an action 
+  
+    
+      
+        a
+      
+    
+    {\displaystyle a}
+  
+ and a policy 
+  
+    
+      
+        π
+      
+    
+    {\displaystyle \pi }
+  
+, the action-value of the pair 
+  
+    
+      
+        (
+        s
+        ,
+        a
+        )
+      
+    
+    {\displaystyle (s,a)}
+  
+ under 
+  
+    
+      
+        π
+      
+    
+    {\displaystyle \pi }
+  
+ is defined by
+
+  
+    
+      
+        
+          Q
+          
+            π
+          
+        
+        (
+        s
+        ,
+        a
+        )
+        =
+        
+          
+            E
+          
+        
+        ⁡
+        [
+        G
+        ∣
+        s
+        ,
+        a
+        ,
+        π
+        ]
+        ,
+      
+    
+    {\displaystyle Q^{\pi }(s,a)=\operatorname {\mathbb {E} } [G\mid s,a,\pi ],}
+  
+
+where 
+  
+    
+      
+        G
+      
+    
+    {\displaystyle G}
+  
+ now stands for the random discounted return associated with first taking action 
+  
+    
+      
+        a
+      
+    
+    {\displaystyle a}
+  
+ in state 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+ and following 
+  
+    
+      
+        π
+      
+    
+    {\displaystyle \pi }
+  
+, thereafter.
+The theory of Markov decision processes states that if 
+  
+    
+      
+        
+          π
+          
+            ∗
+          
+        
+      
+    
+    {\displaystyle \pi ^{*}}
+  
+ is an optimal policy, we act optimally (take the optimal action) by choosing the action from 
+  
+    
+      
+        
+          Q
+          
+            
+              π
+              
+                ∗
+              
+            
+          
+        
+        (
+        s
+        ,
+        ⋅
+        )
+      
+    
+    {\displaystyle Q^{\pi ^{*}}(s,\cdot )}
+  
+ with the highest action-value at each state, 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+. The action-value function of such an optimal policy (
+  
+    
+      
+        
+          Q
+          
+            
+              π
+              
+                ∗
+              
+            
+          
+        
+      
+    
+    {\displaystyle Q^{\pi ^{*}}}
+  
+) is called the optimal action-value function and is commonly denoted by 
+  
+    
+      
+        
+          Q
+          
+            ∗
+          
+        
+      
+    
+    {\displaystyle Q^{*}}
+  
+. In summary, the knowledge of the optimal action-value function alone suffices to know how to act optimally.
+Assuming full knowledge of the Markov decision process, the two basic approaches to compute the optimal action-value function are value iteration and policy iteration. Both algorithms compute a sequence of functions 
+  
+    
+      
+        
+          Q
+          
+            k
+          
+        
+      
+    
+    {\displaystyle Q_{k}}
+  
+ (
+  
+    
+      
+        k
+        =
+        0
+        ,
+        1
+        ,
+        2
+        ,
+        …
+      
+    
+    {\displaystyle k=0,1,2,\ldots }
+  
+) that converge to 
+  
+    
+      
+        
+          Q
+          
+            ∗
+          
+        
+      
+    
+    {\displaystyle Q^{*}}
+  
+. Computing these functions involves computing expectations over the whole state-space, which is impractical for all but the smallest (finite) Markov decision processes. In reinforcement learning methods, expectations are approximated by averaging over samples and using function approximation techniques to cope with the need to represent value functions over large state-action spaces.
+
+
+==== Monte Carlo methods ====
+Monte Carlo methods are used to solve reinforcement learning problems by averaging sample returns. Unlike methods that require full knowledge of the environment's dynamics, Monte Carlo methods rely solely on actual or simulated experience—sequences of states, actions, and rewards obtained from interaction with an environment. This makes them applicable in situations where the complete dynamics are unknown. Learning from actual experience does not require prior knowledge of the environment and can still lead to optimal behavior. When using simulated experience, only a model capable of generating sample transitions is required, rather than a full specification of transition probabilities, which is necessary for dynamic programming methods.
+Monte Carlo methods apply to episodic tasks, where experience is divided into episodes that eventually terminate. Policy and value function updates occur only after the completion of an episode, making these methods incremental on an episode-by-episode basis, though not on a step-by-step (online) basis. The term "Monte Carlo" generally refers to any method involving random sampling; however, in this context, it specifically refers to methods that compute averages from complete returns, rather than partial returns.
+These methods function similarly to the bandit algorithms, in which returns are averaged for each state-action pair. The key difference is that actions taken in one state affect the returns of subsequent states within the same episode, making the problem non-stationary. To address this non-stationarity, Monte Carlo methods use the framework of general policy iteration (GPI). While dynamic programming computes value functions using full knowledge of the Markov decision process, Monte Carlo methods learn these functions through sample returns. The value functions and policies interact similarly to dynamic programming to achieve optimality, first addressing the prediction problem and then extending to policy improvement and control, all based on sampled experience.
+
+
+==== Temporal difference methods ====
+
+The first problem is corrected by allowing the procedure to change the policy (at some or all states) before the values settle. This too may be problematic as it might prevent convergence. Most current algorithms do this, giving rise to the class of generalized policy iteration algorithms. Many actor-critic methods belong to this category.
+The second issue can be corrected by allowing trajectories to contribute to any state-action pair in them. This may also help to some extent with the third problem, although a better solution when returns have high variance is Sutton's temporal difference (TD) methods that are based on the recursive Bellman equation. The computation in TD methods can be incremental (when after each transition the memory is changed and the transition is thrown away), or batch (when the transitions are batched and the estimates are computed once based on the batch). Batch methods, such as the least-squares temporal difference method, may use the information in the samples better, while incremental methods are the only choice when batch methods are infeasible due to their high computational or memory complexity. Some methods try to combine the two approaches. Methods based on temporal differences also overcome the fourth issue.
+Another problem specific to TD comes from their reliance on the recursive Bellman equation. Most TD methods have a so-called 
+  
+    
+      
+        λ
+      
+    
+    {\displaystyle \lambda }
+  
+ parameter 
+  
+    
+      
+        (
+        0
+        ≤
+        λ
+        ≤
+        1
+        )
+      
+    
+    {\displaystyle (0\leq \lambda \leq 1)}
+  
+ that can continuously interpolate between Monte Carlo methods that do not rely on the Bellman equations and the basic TD methods that rely entirely on the Bellman equations. This can mitigate this issue.
+
+
+==== Function approximation methods ====
+In order to address the fifth issue, function approximation methods are used. Linear function approximation starts with a mapping 
+  
+    
+      
+        ϕ
+      
+    
+    {\displaystyle \phi }
+  
+ that assigns a finite-dimensional vector to each state-action pair. Then, the action values of a state-action pair 
+  
+    
+      
+        (
+        s
+        ,
+        a
+        )
+      
+    
+    {\displaystyle (s,a)}
+  
+ are obtained by linearly combining the components of 
+  
+    
+      
+        ϕ
+        (
+        s
+        ,
+        a
+        )
+      
+    
+    {\displaystyle \phi (s,a)}
+  
+ with some weights 
+  
+    
+      
+        θ
+      
+    
+    {\displaystyle \theta }
+  
+:
+
+  
+    
+      
+        Q
+        (
+        s
+        ,
+        a
+        )
+        =
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            d
+          
+        
+        
+          θ
+          
+            i
+          
+        
+        
+          ϕ
+          
+            i
+          
+        
+        (
+        s
+        ,
+        a
+        )
+        .
+      
+    
+    {\displaystyle Q(s,a)=\sum _{i=1}^{d}\theta _{i}\phi _{i}(s,a).}
+  
+
+The algorithms then adjust the weights, instead of adjusting the values associated with the individual state-action pairs. Methods based on ideas from nonparametric statistics (which can be seen to construct their own features) have been explored.
+Value iteration can also be used as a starting point, giving rise to the Q-learning algorithm and its many variants. Including Deep Q-learning methods when a neural network is used to represent Q, with various applications in stochastic search problems.
+The problem with using action-values is that they may need highly precise estimates of the competing action values that can be hard to obtain when the returns are noisy, though this problem is mitigated to some extent by temporal difference methods. Using the so-called compatible function approximation method compromises generality and efficiency.
+
+
+=== Direct policy search ===
+
+An alternative method is to search directly in (some subset of) the policy space, in which case the problem becomes a case of stochastic optimization. The two approaches available are gradient-based and gradient-free methods.
+Gradient-based methods (policy gradient methods) start with a mapping from a finite-dimensional (parameter) space to the space of policies: given the parameter vector 
+  
+    
+      
+        θ
+      
+    
+    {\displaystyle \theta }
+  
+, let 
+  
+    
+      
+        
+          π
+          
+            θ
+          
+        
+      
+    
+    {\displaystyle \pi _{\theta }}
+  
+ denote the policy associated to 
+  
+    
+      
+        θ
+      
+    
+    {\displaystyle \theta }
+  
+. Defining the performance function by 
+  
+    
+      
+        ρ
+        (
+        θ
+        )
+        =
+        
+          ρ
+          
+            
+              π
+              
+                θ
+              
+            
+          
+        
+      
+    
+    {\displaystyle \rho (\theta )=\rho ^{\pi _{\theta }}}
+  
+ under mild conditions this function will be differentiable as a function of the parameter vector 
+  
+    
+      
+        θ
+      
+    
+    {\displaystyle \theta }
+  
+. If the gradient of 
+  
+    
+      
+        ρ
+      
+    
+    {\displaystyle \rho }
+  
+ was known, one could use gradient ascent. Since an analytic expression for the gradient is not available, only a noisy estimate is available. Such an estimate can be constructed in many ways, giving rise to algorithms such as Williams's REINFORCE method (which is known as the likelihood ratio method in the simulation-based optimization literature).
+A large class of methods avoids relying on gradient information. These include simulated annealing, cross-entropy search or methods of evolutionary computation. Many gradient-free methods can achieve (in theory and in the limit) a global optimum.
+Policy search methods may converge slowly given noisy data. For example, this happens in episodic problems when the trajectories are long and the variance of the returns is large. Value-function based methods that rely on temporal differences might help in this case. In recent years, actor–critic methods have been proposed and performed well on various problems.
+Policy search methods have been used in the robotics context. Many policy search methods may get stuck in local optima (as they are based on local search).
+
+
+=== Model-based algorithms ===
+Finally, all of the above methods can be combined with algorithms that first learn a model of the Markov decision process, the probability of each next state given an action taken from an existing state. For instance, the Dyna algorithm learns a model from experience, and uses that to provide more modelled transitions for a value function, in addition to the real transitions. Such methods can sometimes be extended to use of non-parametric models, such as when the transitions are simply stored and "replayed" to the learning algorithm.
+Model-based methods can be more computationally intensive than model-free approaches, and their utility can be limited by the extent to which the Markov decision process can be learnt.
+There are other ways to use models than to update a value function. For instance, in model predictive control the model is used to update the behavior directly.
+
+
+=== Partially supervised RL (PSRL) ===
+The costly exploration needed to learn an optimal policy can be reduced if some supervised data is available. This can be achieved for instance by learning a crude control policy and using this to initialize the Q table intelligently instead of with zeros.
+
+
+== Theory ==
+Both the asymptotic and finite-sample behaviors of most algorithms are well understood. Algorithms with provably (i.e. in a way that can be proved) good online performance (addressing the exploration issue) are known.
+Efficient exploration of Markov decision processes is given in Burnetas and Katehakis (1997). Finite-time performance bounds have also appeared for many algorithms, but these bounds are expected to be rather loose and thus more work is needed to better understand the relative advantages and limitations.
+For incremental algorithms, asymptotic convergence issues have been settled. Temporal-difference-based algorithms converge under a wider set of conditions than was previously possible (for example, when used with arbitrary, smooth function approximation).
+
+
+== Research ==
+
+Research topics include:
+
+actor-critic architecture
+actor-critic-scenery architecture
+adaptive methods that work with fewer (or no) parameters under a large number of conditions
+bug detection in software projects
+continuous learning
+combinations with logic-based frameworks (e.g., temporal-logic specifications, reward machines, and probabilistic argumentation).
+exploration in large Markov decision processes
+entity-based reinforcement learning
+human feedback
+interaction between implicit and explicit learning in skill acquisition
+intrinsic motivation which differentiates information-seeking, curiosity-type behaviours from task-dependent goal-directed behaviours large-scale empirical evaluations
+large (or continuous) action spaces
+modular and hierarchical reinforcement learning
+multiagent/distributed reinforcement learning is a topic of interest. Applications are expanding.
+occupant-centric control
+optimization of computing resources
+partial information (e.g., using predictive state representation)
+reward function based on maximising novel information
+sample-based planning (e.g., based on Monte Carlo tree search).
+securities trading
+transfer learning
+TD learning modeling dopamine-based learning in the brain. Dopaminergic projections from the substantia nigra to the basal ganglia function are the prediction error.
+value-function and policy search methods
+
+
+== Comparison of key algorithms ==
+The following table lists the key algorithms for learning a policy depending on several criteria:
+
+The algorithm can be on-policy (it performs policy updates using trajectories sampled via the current policy) or off-policy.
+The action space may be discrete (e.g. the action space could be "going up", "going left", "going right", "going down", "stay") or continuous (e.g. moving the arm with a given angle).
+The state space may be discrete (e.g. the agent could be in a cell in a grid) or continuous (e.g. the agent could be located at a given position in the plane).
+
+
+=== Associative reinforcement learning ===
+Associative reinforcement learning tasks combine facets of stochastic learning automata tasks and supervised learning pattern classification tasks. In associative reinforcement learning tasks, the learning system interacts in a closed loop with its environment.
+
+
+=== Deep reinforcement learning ===
+This approach extends reinforcement learning by using a deep neural network and without explicitly designing the state space. The work on learning ATARI games by Google DeepMind increased attention to deep reinforcement learning or end-to-end reinforcement learning.
+
+
+=== Adversarial deep reinforcement learning ===
+Adversarial deep reinforcement learning is an active area of research in reinforcement learning focusing on vulnerabilities of learned policies. In this research area some studies initially showed that reinforcement learning policies are susceptible to imperceptible adversarial manipulations. While some methods have been proposed to overcome these susceptibilities, in the most recent studies it has been shown that these proposed solutions are far from providing an accurate representation of current vulnerabilities of deep reinforcement learning policies.
+
+
+=== Fuzzy reinforcement learning ===
+By introducing fuzzy inference in reinforcement learning, approximating the state-action value function with fuzzy rules in continuous space becomes possible. The IF - THEN form of fuzzy rules make this approach suitable for expressing the results in a form close to natural language. Extending FRL with Fuzzy Rule Interpolation allows the use of reduced size sparse fuzzy rule-bases to emphasize cardinal rules (most important state-action values).
+
+
+=== Inverse reinforcement learning ===
+In inverse reinforcement learning (IRL), no reward function is given. Instead, the reward function is inferred given an observed behavior from an expert. The idea is to mimic observed behavior, which is often optimal or close to optimal. One popular IRL paradigm is named maximum entropy inverse reinforcement learning (MaxEnt IRL). MaxEnt IRL estimates the parameters of a linear model of the reward function by maximizing the entropy of the probability distribution of observed trajectories subject to constraints related to matching expected feature counts. Recently it has been shown that MaxEnt IRL is a particular case of a more general framework named random utility inverse reinforcement learning (RU-IRL). RU-IRL is based on random utility theory and Markov decision processes. While prior IRL approaches assume that the apparent random behavior of an observed agent is due to it following a random policy, RU-IRL assumes that the observed agent follows a deterministic policy but randomness in observed behavior is due to the fact that an observer only has partial access to the features the observed agent uses in decision making. The utility function is modeled as a random variable to account for the ignorance of the observer regarding the features the observed agent actually considers in its utility function.
+
+
+=== Multi-objective reinforcement learning ===
+Multi-objective reinforcement learning (MORL) is a form of reinforcement learning concerned with conflicting alternatives. It is distinct from multi-objective optimization in that it is concerned with agents acting in environments.
+
+
+=== Safe reinforcement learning ===
+Safe reinforcement learning (SRL) can be defined as the process of learning policies that maximize the expectation of the return in problems in which it is important to ensure reasonable system performance and/or respect safety constraints during the learning and/or deployment processes. An alternative approach is risk-averse reinforcement learning, where instead of the expected return, a risk-measure of the return is optimized, such as the conditional value at risk (CVaR). In addition to mitigating risk, the CVaR objective increases robustness to model uncertainties. However, CVaR optimization in risk-averse RL requires special care, to prevent gradient bias and blindness to success.
+
+
+=== Self-reinforcement learning ===
+Self-reinforcement learning (or self-learning), is a learning paradigm which does not use the concept of immediate reward 
+  
+    
+      
+        
+          R
+          
+            a
+          
+        
+        (
+        s
+        ,
+        
+          s
+          ′
+        
+        )
+      
+    
+    {\displaystyle R_{a}(s,s')}
+  
+ after transition from 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+ to 
+  
+    
+      
+        
+          s
+          ′
+        
+      
+    
+    {\displaystyle s'}
+  
+ with action 
+  
+    
+      
+        a
+      
+    
+    {\displaystyle a}
+  
+. It does not use an external reinforcement, it only uses the agent internal self-reinforcement. The internal self-reinforcement is provided by mechanism of feelings and emotions. In the learning process emotions are backpropagated by a mechanism of secondary reinforcement. The learning equation does not include the immediate reward, it only includes the state evaluation.
+The self-reinforcement algorithm updates a memory matrix 
+  
+    
+      
+        W
+        =
+        ‖
+        w
+        (
+        a
+        ,
+        s
+        )
+        ‖
+      
+    
+    {\displaystyle W=\|w(a,s)\|}
+  
+ such that in each iteration executes the following machine learning routine:
+
+In situation 
+  
+    
+      
+        s
+      
+    
+    {\displaystyle s}
+  
+ perform action 
+  
+    
+      
+        a
+      
+    
+    {\displaystyle a}
+  
+.
+Receive a consequence situation 
+  
+    
+      
+        
+          s
+          ′
+        
+      
+    
+    {\displaystyle s'}
+  
+.
+Compute state evaluation 
+  
+    
+      
+        v
+        (
+        
+          s
+          ′
+        
+        )
+      
+    
+    {\displaystyle v(s')}
+  
+ of how good it is to be in the consequence situation 
+  
+    
+      
+        
+          s
+          ′
+        
+      
+    
+    {\displaystyle s'}
+  
+.
+Update crossbar memory 
+  
+    
+      
+        
+          w
+          ′
+        
+        (
+        a
+        ,
+        s
+        )
+        =
+        w
+        (
+        a
+        ,
+        s
+        )
+        +
+        v
+        (
+        
+          s
+          ′
+        
+        )
+      
+    
+    {\displaystyle w'(a,s)=w(a,s)+v(s')}
+  
+.
+Initial conditions of the memory are received as input from the genetic environment. It is a system with only one input (situation), and only one output (action, or behavior).
+Self-reinforcement (self-learning) was introduced in 1982 along with a neural network capable of self-reinforcement learning, named Crossbar Adaptive Array (CAA). The CAA computes, in a crossbar fashion, both decisions about actions and emotions (feelings) about consequence states. The system is driven by the interaction between cognition and emotion.
+
+
+== Statistical comparison of reinforcement learning algorithms ==
+Efficient comparison of RL algorithms is essential for research, deployment and monitoring of RL systems. To compare different algorithms on a given environment, an agent can be trained for each algorithm. Since the performance is sensitive to implementation details, all algorithms should be implemented as closely as possible to each other. After the training is finished, the agents can be run on a sample of test episodes, and their scores (returns) can be compared. Since episodes are typically assumed to be i.i.d, standard statistical tools can be used for hypothesis testing, such as T-test and permutation test. This requires to accumulate all the rewards within an episode into a single number—the episodic return. However, this causes a loss of information, as different time-steps are averaged together, possibly with different levels of noise. Whenever the noise level varies across the episode, the statistical power can be improved significantly, by weighting the rewards according to their estimated noise.
+
+
+== Challenges and limitations ==
+Despite significant advancements, reinforcement learning (RL) continues to face several challenges and limitations that hinder its widespread application in real-world scenarios.
+
+
+=== Sample inefficiency ===
+RL algorithms often require a large number of interactions with the environment to learn effective policies, leading to high computational costs and time-intensive to train the agent. For instance, OpenAI's Dota-playing bot utilized thousands of years of simulated gameplay to achieve human-level performance. Techniques like experience replay and curriculum learning have been proposed to reduce sample inefficiency, but these techniques add more complexity and are not always sufficient for real-world applications.
+
+
+=== Stability and convergence issues ===
+Training RL models, particularly for deep neural network-based models, can be unstable and prone to divergence. A small change in the policy or environment can lead to extreme fluctuations in performance, making it difficult to achieve consistent results. This instability is further enhanced in the case of the continuous or high-dimensional action space, where the learning step becomes more complex and less predictable.
+
+
+=== Generalization and transferability ===
+The RL agents trained in specific environments often struggle to generalize their learned policies to new, unseen scenarios. This is the major setback preventing the application of RL to dynamic real-world environments where adaptability is crucial. The challenge is to develop such algorithms that can transfer knowledge across tasks and environments without extensive retraining.
+
+
+=== Bias and reward function issues ===
+Designing appropriate reward functions is critical in RL because poorly designed reward functions can lead to unintended behaviors. In addition, RL systems trained on biased data may perpetuate existing biases and lead to discriminatory or unfair outcomes. Both of these issues requires careful consideration of reward structures and data sources to ensure fairness and desired behaviors.
+
+
+== In natural language processing ==
+In natural language processing (NLP), reinforcement learning has been applied to tasks in which text generation is treated as a sequential decision problem: the model's policy selects words or utterances as actions, and the reward measures properties of the completed output that are difficult to express as a per-token supervised loss. Early applications used policy-gradient methods such as REINFORCE to optimize sequence-level evaluation metrics, including BLEU in machine translation and ROUGE in text summarization, and to train dialogue systems.
+Reinforcement learning from human feedback (RLHF) is used to train large language models. In RLHF, human annotators compare or rank model outputs, a reward model is trained on these preference judgments, and the language model is then fine-tuned with a policy-gradient algorithm, commonly proximal policy optimization (PPO), to produce outputs that the reward model scores highly. The reward model substitutes for human raters during optimization, so new human judgments are not required at each training step, although the method as a whole depends on a dataset of human-annotated preferences. OpenAI used RLHF to train InstructGPT, released in January 2022, and ChatGPT, released in November 2022. Direct preference optimization (DPO), published in 2023, instead fine-tunes the language model on the preference data directly, without a separate reward model or reinforcement learning loop.
+Later work on language models designed for multi-step reasoning replaced the learned reward model with rewards computed automatically from the task, such as checking a mathematical answer against a reference solution or running unit tests on generated code. OpenAI o1, released in 2024, and DeepSeek-R1, released in 2025, were trained with large-scale reinforcement learning of this kind to produce a chain of thought before answering. DeepSeek-R1's developers reported that reasoning behaviors such as self-verification and reflection emerged when reinforcement learning was applied directly to a pretrained base model, without a preliminary supervised fine-tuning stage.
+
+
+== See also ==
+
+
+== References ==
+
+
+== Further reading ==
+Annaswamy, Anuradha M. (3 May 2023). "Adaptive Control and Intersections with Reinforcement Learning". Annual Review of Control, Robotics, and Autonomous Systems. 6 (1): 65–93. doi:10.1146/annurev-control-062922-090153. ISSN 2573-5144. S2CID 255702873.
+Auer, Peter; Jaksch, Thomas; Ortner, Ronald (2010). "Near-optimal regret bounds for reinforcement learning". Journal of Machine Learning Research. 11: 1563–1600.
+Bertsekas, Dimitri P. (2023) [2019]. Reinforcement Learning and Optimal Control (1st ed.). Athena Scientific. ISBN 978-1-886-52939-7.
+Busoniu, Lucian; Babuska, Robert; De Schutter, Bart; Ernst, Damien (2010). Reinforcement Learning and Dynamic Programming using Function Approximators. Taylor & Francis CRC Press. ISBN 978-1-4398-2108-4.
+François-Lavet, Vincent; Henderson, Peter; Islam, Riashat; Bellemare, Marc G.; Pineau, Joelle (2018). "An Introduction to Deep Reinforcement Learning". Foundations and Trends in Machine Learning. 11 (3–4): 219–354. arXiv:1811.12560. Bibcode:2018arXiv181112560F. doi:10.1561/2200000071. S2CID 54434537.
+Li, Shengbo Eben (2023). Reinforcement Learning for Sequential Decision and Optimal Control (1st ed.). Springer Verlag, Singapore. doi:10.1007/978-981-19-7784-8. ISBN 978-9-811-97783-1.
+Powell, Warren (2011). Approximate dynamic programming: solving the curses of dimensionality. Wiley-Interscience. Archived from the original on 2016-07-31. Retrieved 2010-09-08.
+Sutton, Richard S. (1988). "Learning to predict by the method of temporal differences". Machine Learning. 3 (1): 9–44. Bibcode:1988MLear...3....9S. doi:10.1007/BF00115009.
+Sutton, Richard S.; Barto, Andrew G. (2018) [1998]. Reinforcement Learning: An Introduction (2nd ed.). MIT Press. ISBN 978-0-262-03924-6.
+Szita, Istvan; Szepesvari, Csaba (2010). "Model-based Reinforcement Learning with Nearly Tight Exploration Complexity Bounds" (PDF). ICML 2010. Omnipress. pp. 1031–1038. Archived from the original (PDF) on 2010-07-14.
+
+
+== External links ==
+Dissecting Reinforcement Learning Series of blog post on reinforcement learning with Python code
+A (Long) Peek into Reinforcement Learning
+QSMM – reinforcement learning through adaptive probabilistic assembler programs

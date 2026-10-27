@@ -1,0 +1,3559 @@
+Random forest
+
+Random forests or random decision forests is an ensemble learning method for classification, regression and other tasks that works by creating a multitude of decision trees during training. For classification tasks, the output of the random forest is the class selected by most trees. For regression tasks, the output is the average of the predictions of the trees. Random forests correct for decision trees' habit of overfitting to their training set.
+The first algorithm for random decision forests was created in 1995 by Tin Kam Ho using the random subspace method, which, in Ho's formulation, is a way to implement the "stochastic discrimination" approach to classification proposed by Eugene Kleinberg.
+An extension of the algorithm was developed by Leo Breiman and Adele Cutler, who registered "Random Forests" as a trademark in 2006 (as of 2019, owned by Minitab, Inc.). The extension combines Breiman's "bagging" idea and random selection of features, introduced first by Ho and later independently by Amit and Geman in order to construct a collection of decision trees with controlled variance.
+
+
+== History ==
+The general method of random decision forests was first proposed by Salzberg and Heath in 1993, with a method that used a randomized decision tree algorithm to create multiple trees and then combine them using majority voting.  This idea was developed further by Ho in 1995.  Ho established that forests of trees splitting with oblique hyperplanes can gain accuracy as they grow without suffering from overtraining, as long as the forests are randomly restricted to be sensitive to only selected feature dimensions.  A subsequent work along the same lines concluded that other splitting methods behave similarly, as long as they are randomly forced to be insensitive to some feature dimensions.  This observation that a more complex classifier (a larger forest) gets more accurate nearly monotonically is in sharp contrast to the common belief that the complexity of a classifier can only grow to a certain level of accuracy before being hurt by overfitting.  The explanation of the forest method's resistance to overtraining can be found in Kleinberg's theory of stochastic discrimination.
+The early development of Breiman's notion of random forests was influenced by the work of Amit and Geman who introduced the idea of searching over a random subset of the available decisions when splitting a node, in the context of growing a single tree.  The idea of random subspace selection from Ho was also influential in the design of random forests.  This method grows a forest of trees, and introduces variation among the trees by projecting the training data into a randomly chosen subspace before fitting each tree or each node.  Finally, the idea of randomized node optimization, where the decision at each node is selected by a randomized procedure, rather than a deterministic optimization was first introduced by Thomas G. Dietterich.
+The proper introduction of random forests was made in a paper by Leo Breiman,
+that has become one of the world's most cited papers.
+This paper describes a method of building a forest of uncorrelated trees using a CART-like procedure, combined with randomized node optimization and bagging.  In addition, this paper combines several ingredients, some previously known and some novel, which form the basis of the modern practice of random forests, in particular:
+
+Using out-of-bag error as an estimate of the generalization error.
+Measuring variable importance through permutation.
+The report also offers the first theoretical result for random forests in the form of a bound on the generalization error which depends on the strength of the trees in the forest and their correlation.
+
+
+== Algorithm ==
+
+
+=== Preliminaries: decision tree learning ===
+
+Decision trees are a popular method for various machine learning tasks. Tree learning is almost "an off-the-shelf procedure for data mining", say Hastie et al., "because it is invariant under scaling and various other transformations of feature values, is robust to inclusion of irrelevant features, and produces inspectable models. However, they are seldom accurate".
+In particular, trees that are grown very deep tend to learn highly irregular patterns: they overfit their training sets, i.e. have low bias, but very high variance. Random forests are a way of averaging multiple deep decision trees, trained on different parts of the same training set, with the goal of reducing the variance. This comes at the expense of a small increase in the bias and some loss of interpretability, but generally greatly boosts the performance in the final model.
+
+
+=== Bagging ===
+
+The training algorithm for random forests applies the general technique of bootstrap aggregating, or bagging, to tree learners. Given a training set X = x1, ..., xn with responses Y = y1, ..., yn, bagging repeatedly (B times) selects a random sample with replacement of the training set and fits trees to these samples:
+
+After training, predictions for unseen samples x' can be made by averaging the predictions from all the individual regression trees on x':
+
+  
+    
+      
+        
+          
+            
+              f
+              ^
+            
+          
+        
+        =
+        
+          
+            1
+            B
+          
+        
+        
+          ∑
+          
+            b
+            =
+            1
+          
+          
+            B
+          
+        
+        
+          f
+          
+            b
+          
+        
+        (
+        
+          x
+          ′
+        
+        )
+      
+    
+    {\displaystyle {\hat {f}}={\frac {1}{B}}\sum _{b=1}^{B}f_{b}(x')}
+  
+
+or by taking the plurality vote in the case of classification trees.
+This bootstrapping procedure leads to better model performance because it decreases the variance of the model, without increasing the bias. This means that while the predictions of a single tree are highly sensitive to noise in its training set, the average of many trees is not, as long as the trees are not correlated. Simply training many trees on a single training set would give strongly correlated trees (or even the same tree many times, if the training algorithm is deterministic); bootstrap sampling is a way of de-correlating the trees by showing them different training sets.
+Additionally, an estimate of the uncertainty of the prediction can be made as the standard deviation of the predictions from all the individual regression trees on x′:
+
+  
+    
+      
+        σ
+        =
+        
+          
+            
+              
+                
+                  ∑
+                  
+                    b
+                    =
+                    1
+                  
+                  
+                    B
+                  
+                
+                (
+                
+                  f
+                  
+                    b
+                  
+                
+                (
+                
+                  x
+                  ′
+                
+                )
+                −
+                
+                  
+                    
+                      f
+                      ^
+                    
+                  
+                
+                
+                  )
+                  
+                    2
+                  
+                
+              
+              
+                B
+                −
+                1
+              
+            
+          
+        
+        .
+      
+    
+    {\displaystyle \sigma ={\sqrt {\frac {\sum _{b=1}^{B}(f_{b}(x')-{\hat {f}})^{2}}{B-1}}}.}
+  
+
+The number B of samples (equivalently, of trees) is a free parameter. Typically, a few hundred to several thousand trees are used, depending on the size and nature of the training set. B can be optimized using cross-validation, or by observing the out-of-bag error: the mean prediction error on each training sample xi, using only the trees that did not have xi in their bootstrap sample.
+The training and test error tend to level off after some number of trees have been fit.
+
+
+=== From bagging to random forests ===
+
+The above procedure describes the original bagging algorithm for trees. Random forests also include another type of bagging scheme: they use a modified tree learning algorithm that selects, at each candidate split in the learning process, a random subset of the features. This process is sometimes called "feature bagging". The reason for doing this is the correlation of the trees in an ordinary bootstrap sample: if one or a few features are very strong predictors for the response variable (target output), these features will be selected in many of the B trees, causing them to become correlated. An analysis of how bagging and random subspace projection contribute to accuracy gains under different conditions is given by Ho.
+Typically, for a classification problem with 
+  
+    
+      
+        p
+      
+    
+    {\displaystyle p}
+  
+ features, 
+  
+    
+      
+        
+          
+            p
+          
+        
+      
+    
+    {\displaystyle {\sqrt {p}}}
+  
+ (rounded down) features are used in each split.  For regression problems the inventors recommend 
+  
+    
+      
+        p
+        
+          /
+        
+        3
+      
+    
+    {\displaystyle p/3}
+  
+ (rounded down) with a minimum node size of 5 as the default. In practice, the best values for these parameters should be tuned on a case-to-case basis for every problem.
+
+
+=== ExtraTrees ===
+Adding one further step of randomization yields extremely randomized trees, or ExtraTrees. As with ordinary random forests, they are an ensemble of individual trees, but there are two main differences: (1) each tree is trained using the whole learning sample (rather than a bootstrap sample), and (2) the top-down splitting is randomized: for each feature under consideration, a number of random cut-points are selected, instead of computing the locally optimal cut-point (based on, e.g., information gain or the Gini impurity). The values are chosen from a uniform distribution within the feature's empirical range (in the tree's training set). Then, of all the randomly chosen splits, the split that yields the highest score is chosen to split the node.
+Similar to ordinary random forests, the number of randomly selected features to be considered at each node can be specified. Default values for this parameter are 
+  
+    
+      
+        
+          
+            p
+          
+        
+      
+    
+    {\displaystyle {\sqrt {p}}}
+  
+ for classification and 
+  
+    
+      
+        p
+      
+    
+    {\displaystyle p}
+  
+ for regression, where 
+  
+    
+      
+        p
+      
+    
+    {\displaystyle p}
+  
+ is the number of features in the model.
+
+
+=== Random forests for high-dimensional data ===
+The basic random forest procedure may not work well in situations where there are a large number of features but only a small proportion of these features are informative with respect to sample classification. This can be addressed by encouraging the procedure to focus mainly on features and trees that are informative. Some methods for accomplishing this are:
+
+Prefiltering: Eliminate features that are mostly just noise.
+Enriched Random Forest (ERF): Use weighted random sampling instead of simple random sampling at each node of each tree, giving greater weight to features that appear to be more informative.
+Tree-weighted random forest (TWRF): Give more weight to more accurate trees.
+
+
+== Properties ==
+
+
+=== Variable importance ===
+Random forests can be used to rank the importance of variables in a regression or classification problem in a natural way.  The following technique was described in Breiman's original paper and is implemented in the R package randomForest.
+
+
+==== Permutation importance ====
+To measure a feature's importance in a data set 
+  
+    
+      
+        
+          
+            
+              D
+            
+          
+          
+            n
+          
+        
+        =
+        {
+        (
+        
+          X
+          
+            i
+          
+        
+        ,
+        
+          Y
+          
+            i
+          
+        
+        )
+        
+          }
+          
+            i
+            =
+            1
+          
+          
+            n
+          
+        
+      
+    
+    {\displaystyle {\mathcal {D}}_{n}=\{(X_{i},Y_{i})\}_{i=1}^{n}}
+  
+, first a random forest is trained on the data.  During training, the out-of-bag error for each data point is recorded and averaged over the forest. (If bagging is not used during training, we can instead compute errors on an independent test set.)
+After training, the values of the feature are permuted in the out-of-bag samples and the out-of-bag error is again computed on this perturbed data set. The importance for the feature is computed by averaging the difference in out-of-bag error before and after the permutation over all trees.  The score is normalized by the standard deviation of these differences.
+Features which produce large values for this score are ranked as more important than features which produce small values. The statistical definition of the variable importance measure was given and analyzed by Zhu et al.
+This method of determining variable importance has some drawbacks:
+
+When features have different numbers of values, random forests favor features with more values. Solutions to this problem include partial permutations and growing unbiased trees.
+If the data contain groups of correlated features of similar relevance, then smaller groups are favored over large groups.
+If there are collinear features, the procedure may fail to identify important features. A solution is to permute groups of correlated features together.
+
+
+==== Mean decrease in impurity feature importance ====
+This approach to feature importance for random forests considers as important the variables which decrease a lot the impurity during splitting. It is described in the book Classification and Regression Trees by Leo Breiman and is the default implementation in scikit learn and R. The definition is:
+  
+    
+      
+        
+          unormalized average importance
+        
+        (
+        x
+        )
+        =
+        
+          
+            1
+            
+              n
+              
+                T
+              
+            
+          
+        
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            
+              n
+              
+                T
+              
+            
+          
+        
+        
+          ∑
+          
+            
+              node 
+            
+            j
+            ∈
+            
+              T
+              
+                i
+              
+            
+            
+              |
+            
+            
+              split variable
+            
+            (
+            j
+            )
+            =
+            x
+          
+        
+        
+          p
+          
+            
+              T
+              
+                i
+              
+            
+          
+        
+        (
+        j
+        )
+        Δ
+        
+          i
+          
+            
+              T
+              
+                i
+              
+            
+          
+        
+        (
+        j
+        )
+        ,
+      
+    
+    {\displaystyle {\text{unormalized average importance}}(x)={\frac {1}{n_{T}}}\sum _{i=1}^{n_{T}}\sum _{{\text{node }}j\in T_{i}|{\text{split variable}}(j)=x}p_{T_{i}}(j)\Delta i_{T_{i}}(j),}
+  
+where 
+
+  
+    
+      
+        x
+      
+    
+    {\displaystyle x}
+  
+ is a feature
+
+  
+    
+      
+        
+          n
+          
+            T
+          
+        
+      
+    
+    {\displaystyle n_{T}}
+  
+ is the number of trees in the forest
+
+  
+    
+      
+        
+          T
+          
+            i
+          
+        
+      
+    
+    {\displaystyle T_{i}}
+  
+ is tree 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+
+  
+    
+      
+        
+          p
+          
+            
+              T
+              
+                i
+              
+            
+          
+        
+        (
+        j
+        )
+        =
+        
+          
+            
+              n
+              
+                j
+              
+            
+            n
+          
+        
+      
+    
+    {\displaystyle p_{T_{i}}(j)={\frac {n_{j}}{n}}}
+  
+ is the fraction of samples reaching node 
+  
+    
+      
+        j
+      
+    
+    {\displaystyle j}
+  
+
+  
+    
+      
+        Δ
+        
+          i
+          
+            
+              T
+              
+                i
+              
+            
+          
+        
+        (
+        j
+        )
+      
+    
+    {\displaystyle \Delta i_{T_{i}}(j)}
+  
+ is the change in impurity in tree 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+ at node 
+  
+    
+      
+        j
+      
+    
+    {\displaystyle j}
+  
+.
+As impurity measure for samples falling in a node e.g. the following statistics can be used:
+
+Entropy
+Gini coefficient
+Mean squared error
+The normalized importance is then obtained by normalizing over all features, so that the sum of normalized feature importances is 1.
+The scikit learn default implementation can report misleading feature importance:
+
+it favors high cardinality features
+it uses training statistics and so does not reflect a feature's usefulness for predictions on a test set
+
+
+=== Relationship to nearest neighbors ===
+A relationship between random forests and the k-nearest neighbor algorithm (k-NN) was pointed out by Lin and Jeon in 2002. Both can be viewed as so-called weighted neighborhoods schemes. These are models built from a training set 
+  
+    
+      
+        {
+        (
+        
+          x
+          
+            i
+          
+        
+        ,
+        
+          y
+          
+            i
+          
+        
+        )
+        
+          }
+          
+            i
+            =
+            1
+          
+          
+            n
+          
+        
+      
+    
+    {\displaystyle \{(x_{i},y_{i})\}_{i=1}^{n}}
+  
+ that make predictions 
+  
+    
+      
+        
+          
+            
+              y
+              ^
+            
+          
+        
+      
+    
+    {\displaystyle {\hat {y}}}
+  
+ for new points x' by looking at the "neighborhood" of the point, formalized by a weight function W:
+  
+    
+      
+        
+          
+            
+              y
+              ^
+            
+          
+        
+        =
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            n
+          
+        
+        W
+        (
+        
+          x
+          
+            i
+          
+        
+        ,
+        
+          x
+          ′
+        
+        )
+        
+        
+          y
+          
+            i
+          
+        
+        .
+      
+    
+    {\displaystyle {\hat {y}}=\sum _{i=1}^{n}W(x_{i},x')\,y_{i}.}
+  
+Here, 
+  
+    
+      
+        W
+        (
+        
+          x
+          
+            i
+          
+        
+        ,
+        
+          x
+          ′
+        
+        )
+      
+    
+    {\displaystyle W(x_{i},x')}
+  
+ is the non-negative weight of the i'th training point relative to the new point x' in the same tree. For any x', the weights for points 
+  
+    
+      
+        
+          x
+          
+            i
+          
+        
+      
+    
+    {\displaystyle x_{i}}
+  
+ must sum to 1. Weight functions are as follows:
+
+In k-NN, 
+  
+    
+      
+        W
+        (
+        
+          x
+          
+            i
+          
+        
+        ,
+        
+          x
+          ′
+        
+        )
+        =
+        
+          
+            1
+            k
+          
+        
+      
+    
+    {\displaystyle W(x_{i},x')={\frac {1}{k}}}
+  
+ if xi is one of the k points closest to x', and zero otherwise.
+In a tree, 
+  
+    
+      
+        W
+        (
+        
+          x
+          
+            i
+          
+        
+        ,
+        
+          x
+          ′
+        
+        )
+        =
+        
+          
+            1
+            
+              k
+              ′
+            
+          
+        
+      
+    
+    {\displaystyle W(x_{i},x')={\frac {1}{k'}}}
+  
+ if xi is one of the k' points in the same leaf as x', and zero otherwise.
+Since a forest averages the predictions of a set of m trees with individual weight functions 
+  
+    
+      
+        
+          W
+          
+            j
+          
+        
+      
+    
+    {\displaystyle W_{j}}
+  
+, its predictions are
+  
+    
+      
+        
+          
+            
+              y
+              ^
+            
+          
+        
+        =
+        
+          
+            1
+            m
+          
+        
+        
+          ∑
+          
+            j
+            =
+            1
+          
+          
+            m
+          
+        
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            n
+          
+        
+        
+          W
+          
+            j
+          
+        
+        (
+        
+          x
+          
+            i
+          
+        
+        ,
+        
+          x
+          ′
+        
+        )
+        
+        
+          y
+          
+            i
+          
+        
+        =
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            n
+          
+        
+        
+          (
+          
+            
+              
+                1
+                m
+              
+            
+            
+              ∑
+              
+                j
+                =
+                1
+              
+              
+                m
+              
+            
+            
+              W
+              
+                j
+              
+            
+            (
+            
+              x
+              
+                i
+              
+            
+            ,
+            
+              x
+              ′
+            
+            )
+          
+          )
+        
+        
+        
+          y
+          
+            i
+          
+        
+        .
+      
+    
+    {\displaystyle {\hat {y}}={\frac {1}{m}}\sum _{j=1}^{m}\sum _{i=1}^{n}W_{j}(x_{i},x')\,y_{i}=\sum _{i=1}^{n}\left({\frac {1}{m}}\sum _{j=1}^{m}W_{j}(x_{i},x')\right)\,y_{i}.}
+  
+
+This shows that the whole forest is again a weighted neighborhood scheme, with weights that average those of the individual trees. The neighbors of x' in this interpretation are the points 
+  
+    
+      
+        
+          x
+          
+            i
+          
+        
+      
+    
+    {\displaystyle x_{i}}
+  
+ sharing the same leaf in any tree 
+  
+    
+      
+        j
+      
+    
+    {\displaystyle j}
+  
+. In this way, the neighborhood of x' depends in a complex way on the structure of the trees, and thus on the structure of the training set. Lin and Jeon show that the shape of the neighborhood used by a random forest adapts to the local importance of each feature.
+
+
+== Unsupervised learning ==
+As part of their construction, random forest predictors naturally lead to a dissimilarity measure among observations. One can analogously define dissimilarity between unlabeled data, by training a forest to distinguish original "observed" data from suitably generated synthetic data drawn from a reference distribution. A random forest dissimilarity is attractive because it handles mixed variable types very well, is invariant to monotonic transformations of the input variables, and is robust to outlying observations. Random forest dissimilarity easily deals with a large number of semi-continuous variables due to its intrinsic variable selection; for example, the "Addcl 1" random forest dissimilarity weighs the contribution of each variable according to how dependent it is on other variables. Random forest dissimilarity has been used in a variety of applications, e.g. to find clusters of patients based on tissue marker data.
+
+
+== Variants ==
+Instead of decision trees, linear models have been proposed and evaluated as base estimators in random forests, in particular multinomial logistic regression and naive Bayes classifiers. In cases that the relationship between the predictors and the target variable is linear, the base learners may have an equally high accuracy as the ensemble learner.
+
+
+== Kernel random forest ==
+In machine learning, kernel random forests (KeRF) establish the connection between random forests and kernel methods. By slightly modifying their definition, random forests can be rewritten as kernel methods, which are more interpretable and easier to analyze.
+
+
+=== History ===
+Leo Breiman was the first person to notice the link between random forest and kernel methods. He pointed out that random forests trained using i.i.d. random vectors in the tree construction are equivalent to a kernel acting on the true margin. Lin and Jeon established the connection between random forests and adaptive nearest neighbor, implying that random forests can be seen as adaptive kernel estimates. Davies and Ghahramani proposed Kernel Random Forest (KeRF) and showed that it can empirically outperform state-of-art kernel methods. Scornet first defined KeRF estimates and gave the explicit link between KeRF estimates and random forest. He also gave explicit expressions for kernels based on centered random forest and uniform random forest, two simplified models of random forest. He named these two KeRFs Centered KeRF and Uniform KeRF, and proved upper bounds on their rates of consistency.
+
+
+=== Notations and definitions ===
+
+
+==== Preliminaries: Centered forests ====
+Centered forest is a simplified model for Breiman's original random forest, which uniformly selects an attribute among all attributes and performs splits at the center of the cell along the pre-chosen attribute. The algorithm stops when a fully binary tree of level 
+  
+    
+      
+        k
+      
+    
+    {\displaystyle k}
+  
+ is built, where 
+  
+    
+      
+        k
+        ∈
+        
+          N
+        
+      
+    
+    {\displaystyle k\in \mathbb {N} }
+  
+ is a parameter of the algorithm.
+
+
+==== Uniform forest ====
+Uniform forest is another simplified model for Breiman's original random forest, which uniformly selects a feature among all features and performs splits at a point uniformly drawn on the side of the cell, along the preselected feature.
+
+
+==== From random forest to KeRF ====
+Given a training sample  
+  
+    
+      
+        
+          
+            
+              D
+            
+          
+          
+            n
+          
+        
+        =
+        {
+        (
+        
+          
+            X
+          
+          
+            i
+          
+        
+        ,
+        
+          Y
+          
+            i
+          
+        
+        )
+        
+          }
+          
+            i
+            =
+            1
+          
+          
+            n
+          
+        
+      
+    
+    {\displaystyle {\mathcal {D}}_{n}=\{(\mathbf {X} _{i},Y_{i})\}_{i=1}^{n}}
+  
+ of 
+  
+    
+      
+        [
+        0
+        ,
+        1
+        
+          ]
+          
+            p
+          
+        
+        ×
+        
+          R
+        
+      
+    
+    {\displaystyle [0,1]^{p}\times \mathbb {R} }
+  
+-valued independent random variables distributed as the independent prototype pair 
+  
+    
+      
+        (
+        
+          X
+        
+        ,
+        Y
+        )
+      
+    
+    {\displaystyle (\mathbf {X} ,Y)}
+  
+, where 
+  
+    
+      
+        E
+        ⁡
+        [
+        
+          Y
+          
+            2
+          
+        
+        ]
+        <
+        ∞
+      
+    
+    {\displaystyle \operatorname {E} [Y^{2}]<\infty }
+  
+. We aim at predicting the response 
+  
+    
+      
+        Y
+      
+    
+    {\displaystyle Y}
+  
+, associated with the random variable 
+  
+    
+      
+        
+          X
+        
+      
+    
+    {\displaystyle \mathbf {X} }
+  
+, by estimating the regression function 
+  
+    
+      
+        m
+        (
+        
+          x
+        
+        )
+        =
+        E
+        ⁡
+        [
+        Y
+        ∣
+        
+          X
+        
+        =
+        
+          x
+        
+        ]
+      
+    
+    {\displaystyle m(\mathbf {x} )=\operatorname {E} [Y\mid \mathbf {X} =\mathbf {x} ]}
+  
+. A random regression forest is an ensemble of 
+  
+    
+      
+        M
+      
+    
+    {\displaystyle M}
+  
+ randomized regression trees. Denote 
+  
+    
+      
+        
+          m
+          
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          
+            Θ
+          
+          
+            j
+          
+        
+        )
+      
+    
+    {\displaystyle m_{n}(\mathbf {x} ,\mathbf {\Theta } _{j})}
+  
+ the predicted value at point 
+  
+    
+      
+        
+          x
+        
+      
+    
+    {\displaystyle \mathbf {x} }
+  
+ by the 
+  
+    
+      
+        j
+      
+    
+    {\displaystyle j}
+  
+-th tree, where 
+  
+    
+      
+        
+          
+            Θ
+          
+          
+            1
+          
+        
+        ,
+        …
+        ,
+        
+          
+            Θ
+          
+          
+            M
+          
+        
+      
+    
+    {\displaystyle \mathbf {\Theta } _{1},\ldots ,\mathbf {\Theta } _{M}}
+  
+ are independent random variables, distributed as a generic random variable 
+  
+    
+      
+        
+          Θ
+        
+      
+    
+    {\displaystyle \mathbf {\Theta } }
+  
+, independent of the sample 
+  
+    
+      
+        
+          
+            
+              D
+            
+          
+          
+            n
+          
+        
+      
+    
+    {\displaystyle {\mathcal {D}}_{n}}
+  
+. This random variable can be used to describe the randomness induced by node splitting and the sampling procedure for tree construction. The trees are combined to form the finite forest estimate 
+  
+    
+      
+        
+          m
+          
+            M
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          Θ
+          
+            1
+          
+        
+        ,
+        …
+        ,
+        
+          Θ
+          
+            M
+          
+        
+        )
+        =
+        
+          
+            1
+            M
+          
+        
+        
+          ∑
+          
+            j
+            =
+            1
+          
+          
+            M
+          
+        
+        
+          m
+          
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          Θ
+          
+            j
+          
+        
+        )
+      
+    
+    {\displaystyle m_{M,n}(\mathbf {x} ,\Theta _{1},\ldots ,\Theta _{M})={\frac {1}{M}}\sum _{j=1}^{M}m_{n}(\mathbf {x} ,\Theta _{j})}
+  
+.
+For regression trees, we have 
+  
+    
+      
+        
+          m
+          
+            n
+          
+        
+        =
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            n
+          
+        
+        
+          
+            
+              
+                Y
+                
+                  i
+                
+              
+              
+                
+                  1
+                
+                
+                  
+                    
+                      X
+                    
+                    
+                      i
+                    
+                  
+                  ∈
+                  
+                    A
+                    
+                      n
+                    
+                  
+                  (
+                  
+                    x
+                  
+                  ,
+                  
+                    Θ
+                    
+                      j
+                    
+                  
+                  )
+                
+              
+            
+            
+              
+                N
+                
+                  n
+                
+              
+              (
+              
+                x
+              
+              ,
+              
+                Θ
+                
+                  j
+                
+              
+              )
+            
+          
+        
+      
+    
+    {\displaystyle m_{n}=\sum _{i=1}^{n}{\frac {Y_{i}\mathbf {1} _{\mathbf {X} _{i}\in A_{n}(\mathbf {x} ,\Theta _{j})}}{N_{n}(\mathbf {x} ,\Theta _{j})}}}
+  
+, where 
+  
+    
+      
+        
+          A
+          
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          Θ
+          
+            j
+          
+        
+        )
+      
+    
+    {\displaystyle A_{n}(\mathbf {x} ,\Theta _{j})}
+  
+ is the cell containing 
+  
+    
+      
+        
+          x
+        
+      
+    
+    {\displaystyle \mathbf {x} }
+  
+, designed with randomness 
+  
+    
+      
+        
+          Θ
+          
+            j
+          
+        
+      
+    
+    {\displaystyle \Theta _{j}}
+  
+ and dataset 
+  
+    
+      
+        
+          
+            
+              D
+            
+          
+          
+            n
+          
+        
+      
+    
+    {\displaystyle {\mathcal {D}}_{n}}
+  
+, and 
+  
+    
+      
+        
+          N
+          
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          Θ
+          
+            j
+          
+        
+        )
+        =
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            n
+          
+        
+        
+          
+            1
+          
+          
+            
+              
+                X
+              
+              
+                i
+              
+            
+            ∈
+            
+              A
+              
+                n
+              
+            
+            (
+            
+              x
+            
+            ,
+            
+              Θ
+              
+                j
+              
+            
+            )
+          
+        
+      
+    
+    {\displaystyle N_{n}(\mathbf {x} ,\Theta _{j})=\sum _{i=1}^{n}\mathbf {1} _{\mathbf {X} _{i}\in A_{n}(\mathbf {x} ,\Theta _{j})}}
+  
+.
+Thus random forest estimates satisfy, for all 
+  
+    
+      
+        
+          x
+        
+        ∈
+        [
+        0
+        ,
+        1
+        
+          ]
+          
+            d
+          
+        
+      
+    
+    {\displaystyle \mathbf {x} \in [0,1]^{d}}
+  
+, 
+  
+    
+      
+        
+          m
+          
+            M
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          Θ
+          
+            1
+          
+        
+        ,
+        …
+        ,
+        
+          Θ
+          
+            M
+          
+        
+        )
+        =
+        
+          
+            1
+            M
+          
+        
+        
+          ∑
+          
+            j
+            =
+            1
+          
+          
+            M
+          
+        
+        
+          (
+          
+            
+              ∑
+              
+                i
+                =
+                1
+              
+              
+                n
+              
+            
+            
+              
+                
+                  
+                    Y
+                    
+                      i
+                    
+                  
+                  
+                    
+                      1
+                    
+                    
+                      
+                        
+                          X
+                        
+                        
+                          i
+                        
+                      
+                      ∈
+                      
+                        A
+                        
+                          n
+                        
+                      
+                      (
+                      
+                        x
+                      
+                      ,
+                      
+                        Θ
+                        
+                          j
+                        
+                      
+                      )
+                    
+                  
+                
+                
+                  
+                    N
+                    
+                      n
+                    
+                  
+                  (
+                  
+                    x
+                  
+                  ,
+                  
+                    Θ
+                    
+                      j
+                    
+                  
+                  )
+                
+              
+            
+          
+          )
+        
+      
+    
+    {\displaystyle m_{M,n}(\mathbf {x} ,\Theta _{1},\ldots ,\Theta _{M})={\frac {1}{M}}\sum _{j=1}^{M}\left(\sum _{i=1}^{n}{\frac {Y_{i}\mathbf {1} _{\mathbf {X} _{i}\in A_{n}(\mathbf {x} ,\Theta _{j})}}{N_{n}(\mathbf {x} ,\Theta _{j})}}\right)}
+  
+. Random regression forest has two levels of averaging, first over the samples in the target cell of a tree, then over all trees. Thus the contributions of observations that are in cells with a high density of data points are smaller than that of observations which belong to less populated cells. In order to improve the random forest methods and compensate the misestimation, Scornet defined KeRF by
+
+  
+    
+      
+        
+          
+            
+              
+                m
+                ~
+              
+            
+          
+          
+            M
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          Θ
+          
+            1
+          
+        
+        ,
+        …
+        ,
+        
+          Θ
+          
+            M
+          
+        
+        )
+        =
+        
+          
+            1
+            
+              
+                ∑
+                
+                  j
+                  =
+                  1
+                
+                
+                  M
+                
+              
+              
+                N
+                
+                  n
+                
+              
+              (
+              
+                x
+              
+              ,
+              
+                Θ
+                
+                  j
+                
+              
+              )
+            
+          
+        
+        
+          ∑
+          
+            j
+            =
+            1
+          
+          
+            M
+          
+        
+        
+          ∑
+          
+            i
+            =
+            1
+          
+          
+            n
+          
+        
+        
+          Y
+          
+            i
+          
+        
+        
+          
+            1
+          
+          
+            
+              
+                X
+              
+              
+                i
+              
+            
+            ∈
+            
+              A
+              
+                n
+              
+            
+            (
+            
+              x
+            
+            ,
+            
+              Θ
+              
+                j
+              
+            
+            )
+          
+        
+        ,
+      
+    
+    {\displaystyle {\tilde {m}}_{M,n}(\mathbf {x} ,\Theta _{1},\ldots ,\Theta _{M})={\frac {1}{\sum _{j=1}^{M}N_{n}(\mathbf {x} ,\Theta _{j})}}\sum _{j=1}^{M}\sum _{i=1}^{n}Y_{i}\mathbf {1} _{\mathbf {X} _{i}\in A_{n}(\mathbf {x} ,\Theta _{j})},}
+  
+
+which is equal to the mean of the 
+  
+    
+      
+        
+          Y
+          
+            i
+          
+        
+      
+    
+    {\displaystyle Y_{i}}
+  
+'s falling in the cells containing 
+  
+    
+      
+        
+          x
+        
+      
+    
+    {\displaystyle \mathbf {x} }
+  
+ in the forest. If we define the connection function of the 
+  
+    
+      
+        M
+      
+    
+    {\displaystyle M}
+  
+ finite forest as 
+  
+    
+      
+        
+          K
+          
+            M
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          z
+        
+        )
+        =
+        
+          
+            1
+            M
+          
+        
+        
+          ∑
+          
+            j
+            =
+            1
+          
+          
+            M
+          
+        
+        
+          
+            1
+          
+          
+            
+              z
+            
+            ∈
+            
+              A
+              
+                n
+              
+            
+            (
+            
+              x
+            
+            ,
+            
+              Θ
+              
+                j
+              
+            
+            )
+          
+        
+      
+    
+    {\displaystyle K_{M,n}(\mathbf {x} ,\mathbf {z} )={\frac {1}{M}}\sum _{j=1}^{M}\mathbf {1} _{\mathbf {z} \in A_{n}(\mathbf {x} ,\Theta _{j})}}
+  
+, i.e. the proportion of cells shared between 
+  
+    
+      
+        
+          x
+        
+      
+    
+    {\displaystyle \mathbf {x} }
+  
+ and 
+  
+    
+      
+        
+          z
+        
+      
+    
+    {\displaystyle \mathbf {z} }
+  
+, then almost surely we have 
+  
+    
+      
+        
+          
+            
+              
+                m
+                ~
+              
+            
+          
+          
+            M
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          Θ
+          
+            1
+          
+        
+        ,
+        …
+        ,
+        
+          Θ
+          
+            M
+          
+        
+        )
+        =
+        
+          
+            
+              
+                ∑
+                
+                  i
+                  =
+                  1
+                
+                
+                  n
+                
+              
+              
+                Y
+                
+                  i
+                
+              
+              
+                K
+                
+                  M
+                  ,
+                  n
+                
+              
+              (
+              
+                x
+              
+              ,
+              
+                
+                  x
+                
+                
+                  i
+                
+              
+              )
+            
+            
+              
+                ∑
+                
+                  ℓ
+                  =
+                  1
+                
+                
+                  n
+                
+              
+              
+                K
+                
+                  M
+                  ,
+                  n
+                
+              
+              (
+              
+                x
+              
+              ,
+              
+                
+                  x
+                
+                
+                  ℓ
+                
+              
+              )
+            
+          
+        
+      
+    
+    {\displaystyle {\tilde {m}}_{M,n}(\mathbf {x} ,\Theta _{1},\ldots ,\Theta _{M})={\frac {\sum _{i=1}^{n}Y_{i}K_{M,n}(\mathbf {x} ,\mathbf {x} _{i})}{\sum _{\ell =1}^{n}K_{M,n}(\mathbf {x} ,\mathbf {x} _{\ell })}}}
+  
+, which defines the KeRF.
+
+
+==== Centered KeRF ====
+The construction of Centered KeRF of level 
+  
+    
+      
+        k
+      
+    
+    {\displaystyle k}
+  
+ is the same as for centered forest, except that predictions are made by 
+  
+    
+      
+        
+          
+            
+              
+                m
+                ~
+              
+            
+          
+          
+            M
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          Θ
+          
+            1
+          
+        
+        ,
+        …
+        ,
+        
+          Θ
+          
+            M
+          
+        
+        )
+      
+    
+    {\displaystyle {\tilde {m}}_{M,n}(\mathbf {x} ,\Theta _{1},\ldots ,\Theta _{M})}
+  
+, the corresponding kernel function, or connection function is
+
+  
+    
+      
+        
+          K
+          
+            k
+          
+          
+            c
+            c
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          z
+        
+        )
+        =
+        
+          ∑
+          
+            
+              k
+              
+                1
+              
+            
+            ,
+            …
+            ,
+            
+              k
+              
+                d
+              
+            
+            ,
+            
+              ∑
+              
+                j
+                =
+                1
+              
+              
+                d
+              
+            
+            
+              k
+              
+                j
+              
+            
+            =
+            k
+          
+        
+        
+          
+            
+              k
+              !
+            
+            
+              
+                k
+                
+                  1
+                
+              
+              !
+              ⋯
+              
+                k
+                
+                  d
+                
+              
+              !
+            
+          
+        
+        
+          
+            (
+            
+              
+                1
+                d
+              
+            
+            )
+          
+          
+            k
+          
+        
+        
+          ∏
+          
+            j
+            =
+            1
+          
+          
+            d
+          
+        
+        
+          
+            1
+          
+          
+            ⌈
+            
+              2
+              
+                
+                  k
+                  
+                    j
+                  
+                
+              
+            
+            
+              x
+              
+                j
+              
+            
+            ⌉
+            =
+            ⌈
+            
+              2
+              
+                
+                  k
+                  
+                    j
+                  
+                
+              
+            
+            
+              z
+              
+                j
+              
+            
+            ⌉
+          
+        
+        ,
+        
+        
+           for all 
+        
+        
+          x
+        
+        ,
+        
+          z
+        
+        ∈
+        [
+        0
+        ,
+        1
+        
+          ]
+          
+            d
+          
+        
+        .
+      
+    
+    {\displaystyle K_{k}^{cc}(\mathbf {x} ,\mathbf {z} )=\sum _{k_{1},\ldots ,k_{d},\sum _{j=1}^{d}k_{j}=k}{\frac {k!}{k_{1}!\cdots k_{d}!}}\left({\frac {1}{d}}\right)^{k}\prod _{j=1}^{d}\mathbf {1} _{\lceil 2^{k_{j}}x_{j}\rceil =\lceil 2^{k_{j}}z_{j}\rceil },\qquad {\text{ for all }}\mathbf {x} ,\mathbf {z} \in [0,1]^{d}.}
+  
+
+
+==== Uniform KeRF ====
+Uniform KeRF is built in the same way as uniform forest, except that predictions are made by 
+  
+    
+      
+        
+          
+            
+              
+                m
+                ~
+              
+            
+          
+          
+            M
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        
+          Θ
+          
+            1
+          
+        
+        ,
+        …
+        ,
+        
+          Θ
+          
+            M
+          
+        
+        )
+      
+    
+    {\displaystyle {\tilde {m}}_{M,n}(\mathbf {x} ,\Theta _{1},\ldots ,\Theta _{M})}
+  
+, the corresponding kernel function, or connection function is
+
+  
+    
+      
+        
+          K
+          
+            k
+          
+          
+            u
+            f
+          
+        
+        (
+        
+          0
+        
+        ,
+        
+          x
+        
+        )
+        =
+        
+          ∑
+          
+            
+              k
+              
+                1
+              
+            
+            ,
+            …
+            ,
+            
+              k
+              
+                d
+              
+            
+            ,
+            
+              ∑
+              
+                j
+                =
+                1
+              
+              
+                d
+              
+            
+            
+              k
+              
+                j
+              
+            
+            =
+            k
+          
+        
+        
+          
+            
+              k
+              !
+            
+            
+              
+                k
+                
+                  1
+                
+              
+              !
+              …
+              
+                k
+                
+                  d
+                
+              
+              !
+            
+          
+        
+        
+          
+            (
+            
+              
+                1
+                d
+              
+            
+            )
+          
+          
+            k
+          
+        
+        
+          ∏
+          
+            m
+            =
+            1
+          
+          
+            d
+          
+        
+        
+          (
+          
+            1
+            −
+            
+              |
+            
+            
+              x
+              
+                m
+              
+            
+            
+              |
+            
+            
+              ∑
+              
+                j
+                =
+                0
+              
+              
+                
+                  k
+                  
+                    m
+                  
+                
+                −
+                1
+              
+            
+            
+              
+                
+                  
+                    (
+                    
+                      −
+                      ln
+                      ⁡
+                      
+                        |
+                      
+                      
+                        x
+                        
+                          m
+                        
+                      
+                      
+                        |
+                      
+                    
+                    )
+                  
+                  
+                    j
+                  
+                
+                
+                  j
+                  !
+                
+              
+            
+          
+          )
+        
+        
+           for all 
+        
+        
+          x
+        
+        ∈
+        [
+        0
+        ,
+        1
+        
+          ]
+          
+            d
+          
+        
+        .
+      
+    
+    {\displaystyle K_{k}^{uf}(\mathbf {0} ,\mathbf {x} )=\sum _{k_{1},\ldots ,k_{d},\sum _{j=1}^{d}k_{j}=k}{\frac {k!}{k_{1}!\ldots k_{d}!}}\left({\frac {1}{d}}\right)^{k}\prod _{m=1}^{d}\left(1-|x_{m}|\sum _{j=0}^{k_{m}-1}{\frac {\left(-\ln |x_{m}|\right)^{j}}{j!}}\right){\text{ for all }}\mathbf {x} \in [0,1]^{d}.}
+  
+
+
+=== Properties ===
+
+
+==== Relation between KeRF and random forest ====
+Predictions given by KeRF and random forests are close if the number of points in each cell is controlled:
+
+Assume that there exist sequences 
+  
+    
+      
+        (
+        
+          a
+          
+            n
+          
+        
+        )
+        ,
+        (
+        
+          b
+          
+            n
+          
+        
+        )
+      
+    
+    {\displaystyle (a_{n}),(b_{n})}
+  
+ such that, almost surely,
+
+  
+    
+      
+        
+          a
+          
+            n
+          
+        
+        ≤
+        
+          N
+          
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        Θ
+        )
+        ≤
+        
+          b
+          
+            n
+          
+        
+        
+           and 
+        
+        
+          a
+          
+            n
+          
+        
+        ≤
+        
+          
+            1
+            M
+          
+        
+        
+          ∑
+          
+            m
+            =
+            1
+          
+          
+            M
+          
+        
+        
+          N
+          
+            n
+          
+        
+        
+          
+            x
+          
+          ,
+          
+            Θ
+            
+              m
+            
+          
+        
+        ≤
+        
+          b
+          
+            n
+          
+        
+        .
+      
+    
+    {\displaystyle a_{n}\leq N_{n}(\mathbf {x} ,\Theta )\leq b_{n}{\text{ and }}a_{n}\leq {\frac {1}{M}}\sum _{m=1}^{M}N_{n}{\mathbf {x} ,\Theta _{m}}\leq b_{n}.}
+  
+
+Then almost surely,
+
+  
+    
+      
+        
+          |
+        
+        
+          m
+          
+            M
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        )
+        −
+        
+          
+            
+              
+                m
+                ~
+              
+            
+          
+          
+            M
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        )
+        
+          |
+        
+        ≤
+        
+          
+            
+              
+                b
+                
+                  n
+                
+              
+              −
+              
+                a
+                
+                  n
+                
+              
+            
+            
+              a
+              
+                n
+              
+            
+          
+        
+        
+          
+            
+              
+                m
+                ~
+              
+            
+          
+          
+            M
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        )
+        .
+      
+    
+    {\displaystyle |m_{M,n}(\mathbf {x} )-{\tilde {m}}_{M,n}(\mathbf {x} )|\leq {\frac {b_{n}-a_{n}}{a_{n}}}{\tilde {m}}_{M,n}(\mathbf {x} ).}
+  
+
+
+==== Relation between infinite KeRF and infinite random forest ====
+When the number of trees 
+  
+    
+      
+        M
+      
+    
+    {\displaystyle M}
+  
+ goes to infinity, then we have infinite random forest and infinite KeRF. Their estimates are close if the number of observations in each cell is bounded:
+
+Assume that there exist sequences 
+  
+    
+      
+        (
+        
+          ε
+          
+            n
+          
+        
+        )
+        ,
+        (
+        
+          a
+          
+            n
+          
+        
+        )
+        ,
+        (
+        
+          b
+          
+            n
+          
+        
+        )
+      
+    
+    {\displaystyle (\varepsilon _{n}),(a_{n}),(b_{n})}
+  
+ such that, almost surely
+
+  
+    
+      
+        E
+        ⁡
+        [
+        
+          N
+          
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        Θ
+        )
+        ]
+        ≥
+        1
+        ,
+      
+    
+    {\displaystyle \operatorname {E} [N_{n}(\mathbf {x} ,\Theta )]\geq 1,}
+  
+
+  
+    
+      
+        P
+        ⁡
+        [
+        
+          a
+          
+            n
+          
+        
+        ≤
+        
+          N
+          
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        Θ
+        )
+        ≤
+        
+          b
+          
+            n
+          
+        
+        ∣
+        
+          
+            
+              D
+            
+          
+          
+            n
+          
+        
+        ]
+        ≥
+        1
+        −
+        
+          ε
+          
+            n
+          
+        
+        
+          /
+        
+        2
+        ,
+      
+    
+    {\displaystyle \operatorname {P} [a_{n}\leq N_{n}(\mathbf {x} ,\Theta )\leq b_{n}\mid {\mathcal {D}}_{n}]\geq 1-\varepsilon _{n}/2,}
+  
+
+  
+    
+      
+        P
+        ⁡
+        [
+        
+          a
+          
+            n
+          
+        
+        ≤
+        
+          E
+          
+            Θ
+          
+        
+        ⁡
+        [
+        
+          N
+          
+            n
+          
+        
+        (
+        
+          x
+        
+        ,
+        Θ
+        )
+        ]
+        ≤
+        
+          b
+          
+            n
+          
+        
+        ∣
+        
+          
+            
+              D
+            
+          
+          
+            n
+          
+        
+        ]
+        ≥
+        1
+        −
+        
+          ε
+          
+            n
+          
+        
+        
+          /
+        
+        2
+        ,
+      
+    
+    {\displaystyle \operatorname {P} [a_{n}\leq \operatorname {E} _{\Theta }[N_{n}(\mathbf {x} ,\Theta )]\leq b_{n}\mid {\mathcal {D}}_{n}]\geq 1-\varepsilon _{n}/2,}
+  
+
+Then almost surely,
+
+  
+    
+      
+        
+          |
+        
+        
+          m
+          
+            ∞
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        )
+        −
+        
+          
+            
+              
+                m
+                ~
+              
+            
+          
+          
+            ∞
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        )
+        
+          |
+        
+        ≤
+        
+          
+            
+              
+                b
+                
+                  n
+                
+              
+              −
+              
+                a
+                
+                  n
+                
+              
+            
+            
+              a
+              
+                n
+              
+            
+          
+        
+        
+          
+            
+              
+                m
+                ~
+              
+            
+          
+          
+            ∞
+            ,
+            n
+          
+        
+        (
+        
+          x
+        
+        )
+        +
+        n
+        
+          ε
+          
+            n
+          
+        
+        
+          (
+          
+            
+              max
+              
+                1
+                ≤
+                i
+                ≤
+                n
+              
+            
+            
+              Y
+              
+                i
+              
+            
+          
+          )
+        
+        .
+      
+    
+    {\displaystyle |m_{\infty ,n}(\mathbf {x} )-{\tilde {m}}_{\infty ,n}(\mathbf {x} )|\leq {\frac {b_{n}-a_{n}}{a_{n}}}{\tilde {m}}_{\infty ,n}(\mathbf {x} )+n\varepsilon _{n}\left(\max _{1\leq i\leq n}Y_{i}\right).}
+  
+
+
+=== Consistency results ===
+Assume that 
+  
+    
+      
+        Y
+        =
+        m
+        (
+        
+          X
+        
+        )
+        +
+        ε
+      
+    
+    {\displaystyle Y=m(\mathbf {X} )+\varepsilon }
+  
+, where 
+  
+    
+      
+        ε
+      
+    
+    {\displaystyle \varepsilon }
+  
+ is a centered Gaussian noise, independent of 
+  
+    
+      
+        
+          X
+        
+      
+    
+    {\displaystyle \mathbf {X} }
+  
+, with finite variance 
+  
+    
+      
+        
+          σ
+          
+            2
+          
+        
+        <
+        ∞
+      
+    
+    {\displaystyle \sigma ^{2}<\infty }
+  
+. Moreover, 
+  
+    
+      
+        
+          X
+        
+      
+    
+    {\displaystyle \mathbf {X} }
+  
+ is uniformly distributed on 
+  
+    
+      
+        [
+        0
+        ,
+        1
+        
+          ]
+          
+            d
+          
+        
+      
+    
+    {\displaystyle [0,1]^{d}}
+  
+ and 
+  
+    
+      
+        m
+      
+    
+    {\displaystyle m}
+  
+ is Lipschitz. Scornet proved upper bounds on the rates of consistency for centered KeRF and uniform KeRF.
+
+
+==== Consistency of centered KeRF ====
+Providing 
+  
+    
+      
+        k
+        →
+        ∞
+      
+    
+    {\displaystyle k\rightarrow \infty }
+  
+ and 
+  
+    
+      
+        n
+        
+          /
+        
+        
+          2
+          
+            k
+          
+        
+        →
+        ∞
+      
+    
+    {\displaystyle n/2^{k}\rightarrow \infty }
+  
+, there exists a constant 
+  
+    
+      
+        
+          C
+          
+            1
+          
+        
+        >
+        0
+      
+    
+    {\displaystyle C_{1}>0}
+  
+ such that, for all 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+,
+
+  
+    
+      
+        
+          E
+        
+        [
+        
+          
+            
+              
+                m
+                ~
+              
+            
+          
+          
+            n
+          
+          
+            c
+            c
+          
+        
+        (
+        
+          X
+        
+        )
+        −
+        m
+        (
+        
+          X
+        
+        )
+        
+          ]
+          
+            2
+          
+        
+        ≤
+        
+          C
+          
+            1
+          
+        
+        
+          n
+          
+            −
+            1
+            
+              /
+            
+            (
+            3
+            +
+            d
+            log
+            ⁡
+            2
+            )
+          
+        
+        (
+        log
+        ⁡
+        n
+        
+          )
+          
+            2
+          
+        
+      
+    
+    {\displaystyle \mathbb {E} [{\tilde {m}}_{n}^{cc}(\mathbf {X} )-m(\mathbf {X} )]^{2}\leq C_{1}n^{-1/(3+d\log 2)}(\log n)^{2}}
+  
+.
+
+
+==== Consistency of uniform KeRF ====
+Providing 
+  
+    
+      
+        k
+        →
+        ∞
+      
+    
+    {\displaystyle k\rightarrow \infty }
+  
+ and 
+  
+    
+      
+        n
+        
+          /
+        
+        
+          2
+          
+            k
+          
+        
+        →
+        ∞
+      
+    
+    {\displaystyle n/2^{k}\rightarrow \infty }
+  
+, there exists a constant 
+  
+    
+      
+        C
+        >
+        0
+      
+    
+    {\displaystyle C>0}
+  
+ such that,
+
+  
+    
+      
+        
+          E
+        
+        [
+        
+          
+            
+              
+                m
+                ~
+              
+            
+          
+          
+            n
+          
+          
+            u
+            f
+          
+        
+        (
+        
+          X
+        
+        )
+        −
+        m
+        (
+        
+          X
+        
+        )
+        
+          ]
+          
+            2
+          
+        
+        ≤
+        C
+        
+          n
+          
+            −
+            2
+            
+              /
+            
+            (
+            6
+            +
+            3
+            d
+            log
+            ⁡
+            2
+            )
+          
+        
+        (
+        log
+        ⁡
+        n
+        
+          )
+          
+            2
+          
+        
+      
+    
+    {\displaystyle \mathbb {E} [{\tilde {m}}_{n}^{uf}(\mathbf {X} )-m(\mathbf {X} )]^{2}\leq Cn^{-2/(6+3d\log 2)}(\log n)^{2}}
+  
+.
+
+
+== Disadvantages ==
+While random forests often achieve higher accuracy than a single decision tree, they sacrifice the intrinsic interpretability of decision trees. Decision trees are among a fairly small family of machine learning models that are easily interpretable along with linear models, rule-based models, and attention-based models. This interpretability is one of the main advantages of decision trees. It allows developers to confirm that the model has learned realistic information from the data and allows end-users to have trust and confidence in the decisions made by the model. For example, following the path that a decision tree takes to make its decision is quite trivial, but following the paths of tens or hundreds of trees is much harder. To achieve both performance and interpretability, some model compression techniques allow transforming a random forest into a minimal "born-again" decision tree that faithfully reproduces the same decision function.
+Another limitation of random forests is that if features are linearly correlated with the target, random forest may not enhance the accuracy of the base learner. Likewise in problems with multiple categorical variables.
+
+
+== See also ==
+Boosting – Ensemble learning method
+Decision tree learning – Machine learning algorithm
+Ensemble learning – Statistics and machine learning technique
+Gradient boosting – Machine learning technique
+Non-parametric statistics – Type of statistical analysisPages displaying short descriptions of redirect targets
+Randomized algorithm – Algorithm that employs a degree of randomness as part of its logic or procedure
+
+
+== References ==
+
+
+== Further reading ==
+
+
+== External links ==
+Random Forests classifier description (Leo Breiman's site)
+Liaw, Andy & Wiener, Matthew "Classification and Regression by randomForest" R News (2002) Vol. 2/3 p. 18 (Discussion of the use of the random forest package for R)
