@@ -1,0 +1,25 @@
+strategy,config,type,hit@5,mrr
+fixed,Vector only,factual,1.0,0.7916666666666666
+fixed,Vector only,keyword,0.75,0.6666666666666666
+fixed,Vector only,semantic,0.6,0.3833333333333333
+fixed,BM25 only,factual,0.75,0.6875
+fixed,BM25 only,keyword,0.75,0.6666666666666666
+fixed,BM25 only,semantic,0.7,0.6
+fixed,Hybrid (RRF),factual,0.75,0.6875
+fixed,Hybrid (RRF),keyword,0.9166666666666666,0.7111111111111111
+fixed,Hybrid (RRF),semantic,0.7,0.6
+fixed,Hybrid + Rerank,factual,0.875,0.775
+fixed,Hybrid + Rerank,keyword,0.9166666666666666,0.875
+fixed,Hybrid + Rerank,semantic,0.9,0.62
+recursive,Vector only,factual,0.875,0.5729166666666666
+recursive,Vector only,keyword,0.9166666666666666,0.6736111111111112
+recursive,Vector only,semantic,0.6,0.4833333333333333
+recursive,BM25 only,factual,0.75,0.53125
+recursive,BM25 only,keyword,0.8333333333333334,0.75
+recursive,BM25 only,semantic,0.7,0.7
+recursive,Hybrid (RRF),factual,0.75,0.625
+recursive,Hybrid (RRF),keyword,0.9166666666666666,0.725
+recursive,Hybrid (RRF),semantic,0.7,0.5333333333333333
+recursive,Hybrid + Rerank,factual,0.875,0.7291666666666666
+recursive,Hybrid + Rerank,keyword,1.0,0.7291666666666666
+recursive,Hybrid + Rerank,semantic,0.9,0.825

@@ -1,0 +1,241 @@
+strategy,config,id,type,hit@1,doc_hit@1,hit@3,doc_hit@3,hit@5,doc_hit@5,mrr
+fixed,Vector only,1,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,2,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,3,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,4,semantic,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+fixed,Vector only,5,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,6,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Vector only,7,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Vector only,8,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,9,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,10,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,11,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Vector only,12,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Vector only,13,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.3333333333333333
+fixed,Vector only,14,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Vector only,15,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.3333333333333333
+fixed,Vector only,16,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Vector only,17,keyword,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Vector only,18,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,19,keyword,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Vector only,20,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Vector only,21,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Vector only,22,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,23,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,24,factual,0.0,0.0,1.0,1.0,1.0,1.0,0.5
+fixed,Vector only,25,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Vector only,26,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,27,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,28,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Vector only,29,keyword,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Vector only,30,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,1,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,2,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,3,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,4,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,BM25 only,5,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,6,factual,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,BM25 only,7,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,8,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,9,keyword,0.0,0.0,0.0,1.0,0.0,1.0,0.0
+fixed,BM25 only,10,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,BM25 only,11,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,BM25 only,12,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,13,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,14,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,BM25 only,15,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,BM25 only,16,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,17,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,18,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,BM25 only,19,keyword,0.0,0.0,0.0,1.0,0.0,1.0,0.0
+fixed,BM25 only,20,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,BM25 only,21,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,22,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,23,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,24,factual,0.0,0.0,0.0,1.0,0.0,1.0,0.0
+fixed,BM25 only,25,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,BM25 only,26,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,27,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,28,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,BM25 only,29,keyword,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,BM25 only,30,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),1,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),2,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),3,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),4,semantic,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+fixed,Hybrid (RRF),5,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),6,factual,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Hybrid (RRF),7,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),8,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),9,keyword,0.0,1.0,0.0,1.0,1.0,1.0,0.2
+fixed,Hybrid (RRF),10,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),11,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),12,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),13,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),14,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Hybrid (RRF),15,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Hybrid (RRF),16,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Hybrid (RRF),17,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.3333333333333333
+fixed,Hybrid (RRF),18,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Hybrid (RRF),19,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Hybrid (RRF),20,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Hybrid (RRF),21,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),22,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),23,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),24,factual,0.0,0.0,0.0,1.0,0.0,1.0,0.0
+fixed,Hybrid (RRF),25,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Hybrid (RRF),26,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),27,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),28,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid (RRF),29,keyword,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Hybrid (RRF),30,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,1,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,2,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,3,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,4,semantic,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+fixed,Hybrid + Rerank,5,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,6,factual,0.0,1.0,0.0,1.0,1.0,1.0,0.2
+fixed,Hybrid + Rerank,7,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,8,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,9,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,10,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Hybrid + Rerank,11,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Hybrid + Rerank,12,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,13,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Hybrid + Rerank,14,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,15,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,16,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Hybrid + Rerank,17,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,18,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+fixed,Hybrid + Rerank,19,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,20,semantic,0.0,1.0,0.0,1.0,1.0,1.0,0.2
+fixed,Hybrid + Rerank,21,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,22,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,23,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,24,factual,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Hybrid + Rerank,25,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,26,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,27,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,28,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+fixed,Hybrid + Rerank,29,keyword,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+fixed,Hybrid + Rerank,30,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,1,factual,0.0,1.0,0.0,1.0,1.0,1.0,0.25
+recursive,Vector only,2,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,3,keyword,0.0,0.0,1.0,1.0,1.0,1.0,0.5
+recursive,Vector only,4,semantic,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+recursive,Vector only,5,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,6,factual,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,Vector only,7,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.3333333333333333
+recursive,Vector only,8,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,9,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Vector only,10,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,11,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,Vector only,12,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,13,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.3333333333333333
+recursive,Vector only,14,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Vector only,15,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Vector only,16,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Vector only,17,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,18,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,19,keyword,0.0,1.0,0.0,1.0,1.0,1.0,0.25
+recursive,Vector only,20,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,Vector only,21,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,22,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,23,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,24,factual,0.0,0.0,1.0,1.0,1.0,1.0,0.5
+recursive,Vector only,25,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,Vector only,26,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.3333333333333333
+recursive,Vector only,27,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,28,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Vector only,29,keyword,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,Vector only,30,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,1,factual,0.0,0.0,0.0,1.0,1.0,1.0,0.25
+recursive,BM25 only,2,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,3,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,4,semantic,0.0,0.0,0.0,1.0,0.0,1.0,0.0
+recursive,BM25 only,5,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,6,factual,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,BM25 only,7,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,8,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,BM25 only,9,keyword,0.0,0.0,0.0,1.0,0.0,1.0,0.0
+recursive,BM25 only,10,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,BM25 only,11,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,12,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,13,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,14,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,15,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,BM25 only,16,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,17,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,18,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,19,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,20,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,BM25 only,21,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,22,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,23,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,24,factual,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,BM25 only,25,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,BM25 only,26,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,27,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,28,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,BM25 only,29,keyword,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,BM25 only,30,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Hybrid (RRF),1,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Hybrid (RRF),2,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),3,keyword,0.0,0.0,1.0,1.0,1.0,1.0,0.5
+recursive,Hybrid (RRF),4,semantic,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+recursive,Hybrid (RRF),5,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),6,factual,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,Hybrid (RRF),7,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Hybrid (RRF),8,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),9,keyword,0.0,1.0,0.0,1.0,1.0,1.0,0.2
+recursive,Hybrid (RRF),10,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),11,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Hybrid (RRF),12,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Hybrid (RRF),13,semantic,0.0,1.0,1.0,1.0,1.0,1.0,0.3333333333333333
+recursive,Hybrid (RRF),14,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Hybrid (RRF),15,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Hybrid (RRF),16,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),17,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),18,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),19,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),20,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,Hybrid (RRF),21,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),22,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),23,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),24,factual,0.0,0.0,0.0,1.0,0.0,1.0,0.0
+recursive,Hybrid (RRF),25,semantic,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,Hybrid (RRF),26,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),27,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),28,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid (RRF),29,keyword,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,Hybrid (RRF),30,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,1,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Hybrid + Rerank,2,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.5
+recursive,Hybrid + Rerank,3,keyword,0.0,0.0,1.0,1.0,1.0,1.0,0.3333333333333333
+recursive,Hybrid + Rerank,4,semantic,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+recursive,Hybrid + Rerank,5,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,6,factual,0.0,1.0,1.0,1.0,1.0,1.0,0.3333333333333333
+recursive,Hybrid + Rerank,7,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,8,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,9,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.3333333333333333
+recursive,Hybrid + Rerank,10,keyword,0.0,1.0,0.0,1.0,1.0,1.0,0.25
+recursive,Hybrid + Rerank,11,semantic,0.0,1.0,0.0,1.0,1.0,1.0,0.25
+recursive,Hybrid + Rerank,12,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,13,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,14,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,15,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,16,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,17,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,18,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,19,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,20,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,21,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,22,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,23,keyword,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,24,factual,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+recursive,Hybrid + Rerank,25,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,26,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,27,semantic,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,28,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+recursive,Hybrid + Rerank,29,keyword,0.0,1.0,1.0,1.0,1.0,1.0,0.3333333333333333
+recursive,Hybrid + Rerank,30,factual,1.0,1.0,1.0,1.0,1.0,1.0,1.0

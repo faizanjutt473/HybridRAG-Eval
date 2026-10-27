@@ -1,0 +1,489 @@
+[
+  {
+    "id": 1,
+    "type": "factual",
+    "question": "How many attention heads does the base Transformer model use, and what is the dimension of each head?",
+    "ground_truth_answer": "The base Transformer uses h = 8 parallel attention heads, each with d_k = d_v = 64.",
+    "source_doc": "attention_is_all_you_need.pdf",
+    "evidence": [
+      "h = 8",
+      "h=8",
+      "parallel attention layers, or heads"
+    ]
+  },
+  {
+    "id": 2,
+    "type": "keyword",
+    "question": "What BLEU score did the big Transformer reach on the WMT 2014 English-to-German translation task?",
+    "ground_truth_answer": "The big Transformer reached 28.4 BLEU on WMT 2014 English-to-German, beating previous best results including ensembles by over 2 BLEU.",
+    "source_doc": "attention_is_all_you_need.pdf",
+    "evidence": [
+      "28.4"
+    ]
+  },
+  {
+    "id": 3,
+    "type": "keyword",
+    "question": "How many warmup steps were used in the Transformer's learning rate schedule?",
+    "ground_truth_answer": "The learning rate increased linearly for the first 4000 warmup steps and then decreased proportionally to the inverse square root of the step number.",
+    "source_doc": "attention_is_all_you_need.pdf",
+    "evidence": [
+      "warmup_steps",
+      "warmup steps",
+      "4000"
+    ]
+  },
+  {
+    "id": 4,
+    "type": "semantic",
+    "question": "Why does the Transformer need positional encodings?",
+    "ground_truth_answer": "Because the model has no recurrence or convolution, positional encodings (sine and cosine functions of different frequencies) inject information about the relative or absolute position of tokens in the sequence.",
+    "source_doc": "attention_is_all_you_need.pdf",
+    "evidence": [
+      "positional encodings",
+      "sine and cosine functions"
+    ]
+  },
+  {
+    "id": 5,
+    "type": "factual",
+    "question": "How many layers are in the encoder stack of the base Transformer?",
+    "ground_truth_answer": "The encoder is a stack of N = 6 identical layers, each with a multi-head self-attention sub-layer and a position-wise feed-forward sub-layer.",
+    "source_doc": "attention_is_all_you_need.pdf",
+    "evidence": [
+      "n = 6",
+      "n=6",
+      "stack of n"
+    ]
+  },
+  {
+    "id": 6,
+    "type": "factual",
+    "question": "What two unsupervised pre-training tasks does BERT use?",
+    "ground_truth_answer": "BERT is pre-trained with a masked language model (MLM) task and a next sentence prediction (NSP) task.",
+    "source_doc": "bert.pdf",
+    "evidence": [
+      "next sentence prediction"
+    ]
+  },
+  {
+    "id": 7,
+    "type": "keyword",
+    "question": "What percentage of WordPiece tokens does BERT mask at random in its masked language model objective?",
+    "ground_truth_answer": "BERT masks 15% of all WordPiece tokens in each sequence at random.",
+    "source_doc": "bert.pdf",
+    "evidence": [
+      "15%"
+    ]
+  },
+  {
+    "id": 8,
+    "type": "keyword",
+    "question": "How many parameters do BERT-BASE and BERT-LARGE have?",
+    "ground_truth_answer": "BERT-BASE has 110M parameters (12 layers, hidden size 768, 12 heads) and BERT-LARGE has 340M parameters (24 layers, hidden size 1024, 16 heads).",
+    "source_doc": "bert.pdf",
+    "evidence": [
+      "110m",
+      "340m"
+    ]
+  },
+  {
+    "id": 9,
+    "type": "keyword",
+    "question": "Which corpora was BERT pre-trained on?",
+    "ground_truth_answer": "BERT was pre-trained on BooksCorpus (800M words) and English Wikipedia (2,500M words).",
+    "source_doc": "bert.pdf",
+    "evidence": [
+      "bookscorpus"
+    ]
+  },
+  {
+    "id": 10,
+    "type": "keyword",
+    "question": "What are the two formulations of RAG models proposed in the retrieval-augmented generation paper?",
+    "ground_truth_answer": "The paper proposes RAG-Sequence, which uses the same retrieved document for the whole output sequence, and RAG-Token, which can use a different document for each token.",
+    "source_doc": "rag_lewis_et_al.pdf",
+    "evidence": [
+      "rag-token"
+    ]
+  },
+  {
+    "id": 11,
+    "type": "semantic",
+    "question": "What retriever and generator components make up the RAG model?",
+    "ground_truth_answer": "RAG combines a pre-trained neural retriever (Dense Passage Retriever, DPR) with a pre-trained BART sequence-to-sequence generator, and the two are fine-tuned end to end.",
+    "source_doc": "rag_lewis_et_al.pdf",
+    "evidence": [
+      "bart"
+    ]
+  },
+  {
+    "id": 12,
+    "type": "semantic",
+    "question": "What serves as the non-parametric memory in RAG?",
+    "ground_truth_answer": "A dense vector index of Wikipedia, accessed with a pre-trained neural retriever, serves as the non-parametric memory.",
+    "source_doc": "rag_lewis_et_al.pdf",
+    "evidence": [
+      "dense vector index of wikipedia",
+      "non-parametric memory"
+    ]
+  },
+  {
+    "id": 13,
+    "type": "semantic",
+    "question": "What problem does residual learning address in very deep networks?",
+    "ground_truth_answer": "It addresses the degradation problem: as plain networks get deeper, accuracy saturates and then degrades (higher training error). Layers instead learn residual functions with reference to the layer inputs.",
+    "source_doc": "resnet.pdf",
+    "evidence": [
+      "degradation problem"
+    ]
+  },
+  {
+    "id": 14,
+    "type": "keyword",
+    "question": "What top-5 error did the ensemble of residual networks achieve on the ImageNet test set?",
+    "ground_truth_answer": "An ensemble of residual nets achieved 3.57% top-5 error on the ImageNet test set, winning first place in the ILSVRC 2015 classification task.",
+    "source_doc": "resnet.pdf",
+    "evidence": [
+      "3.57%"
+    ]
+  },
+  {
+    "id": 15,
+    "type": "factual",
+    "question": "What is the maximum depth of the residual networks evaluated on ImageNet?",
+    "ground_truth_answer": "The paper evaluates residual nets with up to 152 layers, which is 8x deeper than VGG nets but still has lower complexity.",
+    "source_doc": "resnet.pdf",
+    "evidence": [
+      "152 layers"
+    ]
+  },
+  {
+    "id": 16,
+    "type": "semantic",
+    "question": "How does LoRA reduce the number of trainable parameters when adapting a large language model?",
+    "ground_truth_answer": "LoRA freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture.",
+    "source_doc": "lora.pdf",
+    "evidence": [
+      "rank decomposition matrices"
+    ]
+  },
+  {
+    "id": 17,
+    "type": "keyword",
+    "question": "By what factor does LoRA reduce trainable parameters and GPU memory compared to fine-tuning GPT-3 175B with Adam?",
+    "ground_truth_answer": "LoRA can reduce the number of trainable parameters by 10,000 times and the GPU memory requirement by 3 times.",
+    "source_doc": "lora.pdf",
+    "evidence": [
+      "10,000 times",
+      "10,000"
+    ]
+  },
+  {
+    "id": 18,
+    "type": "semantic",
+    "question": "Does LoRA add inference latency compared to a fully fine-tuned model?",
+    "ground_truth_answer": "No. Unlike adapters, LoRA introduces no additional inference latency because the trainable matrices can be merged with the frozen weights at deployment.",
+    "source_doc": "lora.pdf",
+    "evidence": [
+      "inference latency"
+    ]
+  },
+  {
+    "id": 19,
+    "type": "keyword",
+    "question": "What default hyperparameter values does the Adam paper recommend?",
+    "ground_truth_answer": "Adam's recommended defaults are a step size of 0.001, beta1 = 0.9, beta2 = 0.999 and epsilon = 1e-8.",
+    "source_doc": "adam_optimizer.pdf",
+    "evidence": [
+      "0.999"
+    ]
+  },
+  {
+    "id": 20,
+    "type": "semantic",
+    "question": "What does the name Adam stand for and what is the method based on?",
+    "ground_truth_answer": "Adam is derived from adaptive moment estimation. It is a first-order gradient-based optimizer that uses adaptive estimates of lower-order moments of the gradients.",
+    "source_doc": "adam_optimizer.pdf",
+    "evidence": [
+      "adaptive moment estimation"
+    ]
+  },
+  {
+    "id": 21,
+    "type": "semantic",
+    "question": "What is internal covariate shift according to the batch normalization paper?",
+    "ground_truth_answer": "Internal covariate shift is the change in the distribution of network activations caused by the change in network parameters during training.",
+    "source_doc": "batch_normalization.pdf",
+    "evidence": [
+      "internal covariate shift"
+    ]
+  },
+  {
+    "id": 22,
+    "type": "keyword",
+    "question": "How many fewer training steps did batch normalization need to match the accuracy of the original Inception model?",
+    "ground_truth_answer": "Applied to a state-of-the-art image classification model, batch normalization achieved the same accuracy with 14 times fewer training steps.",
+    "source_doc": "batch_normalization.pdf",
+    "evidence": [
+      "14 times"
+    ]
+  },
+  {
+    "id": 23,
+    "type": "keyword",
+    "question": "What top-5 validation error did the batch-normalized ensemble reach on ImageNet?",
+    "ground_truth_answer": "The batch-normalized ensemble reached 4.9% top-5 validation error (and 4.8% test error), exceeding the accuracy of human raters.",
+    "source_doc": "batch_normalization.pdf",
+    "evidence": [
+      "4.9%"
+    ]
+  },
+  {
+    "id": 24,
+    "type": "factual",
+    "question": "Which two model architectures are proposed in the word2vec paper?",
+    "ground_truth_answer": "The paper proposes the Continuous Bag-of-Words (CBOW) model and the Continuous Skip-gram model.",
+    "source_doc": "word2vec.pdf",
+    "evidence": [
+      "skip-gram"
+    ]
+  },
+  {
+    "id": 25,
+    "type": "semantic",
+    "question": "What example demonstrates that word vectors capture semantic relationships through vector arithmetic?",
+    "ground_truth_answer": "vector('King') - vector('Man') + vector('Woman') results in a vector closest to vector('Queen').",
+    "source_doc": "word2vec.pdf",
+    "evidence": [
+      "queen"
+    ]
+  },
+  {
+    "id": 26,
+    "type": "factual",
+    "question": "What fraction of hidden units are randomly omitted on each training case when using dropout?",
+    "ground_truth_answer": "Half of the feature detectors (hidden units) are randomly omitted on each training case, i.e. each unit is dropped with probability 0.5.",
+    "source_doc": "dropout.pdf",
+    "evidence": [
+      "half of the feature detectors",
+      "probability of 0.5"
+    ]
+  },
+  {
+    "id": 27,
+    "type": "semantic",
+    "question": "What problem does randomly omitting feature detectors prevent?",
+    "ground_truth_answer": "It prevents complex co-adaptations in which a feature detector is only helpful in the context of several other specific feature detectors, which reduces overfitting.",
+    "source_doc": "dropout.pdf",
+    "evidence": [
+      "co-adaptation",
+      "co-adapt"
+    ]
+  },
+  {
+    "id": 28,
+    "type": "factual",
+    "question": "Which negative passages worked best when training the Dense Passage Retriever?",
+    "ground_truth_answer": "The best setup used in-batch negatives (gold passages of other questions in the same batch) together with one BM25 hard negative per question.",
+    "source_doc": "dense_passage_retrieval.pdf",
+    "evidence": [
+      "in-batch"
+    ]
+  },
+  {
+    "id": 29,
+    "type": "keyword",
+    "question": "By how much does DPR outperform BM25 in top-20 passage retrieval accuracy?",
+    "ground_truth_answer": "DPR outperforms a strong Lucene-BM25 system by 9%-19% absolute in top-20 passage retrieval accuracy.",
+    "source_doc": "dense_passage_retrieval.pdf",
+    "evidence": [
+      "19%"
+    ]
+  },
+  {
+    "id": 30,
+    "type": "factual",
+    "question": "What similarity function does DPR use to compare questions and passages?",
+    "ground_truth_answer": "DPR uses the dot product between the dense vector representations produced by two separate BERT encoders (question and passage).",
+    "source_doc": "dense_passage_retrieval.pdf",
+    "evidence": [
+      "dot product"
+    ]
+  },
+  {
+    "id": 31,
+    "type": "keyword",
+    "question": "Who coined the term machine learning and in which year?",
+    "ground_truth_answer": "The term machine learning was coined in 1959 by Arthur Samuel, an IBM employee and pioneer in computer gaming and artificial intelligence.",
+    "source_doc": "wiki_machine_learning.txt",
+    "evidence": [
+      "arthur samuel"
+    ]
+  },
+  {
+    "id": 32,
+    "type": "keyword",
+    "question": "Who is generally credited with first suggesting gradient descent and when?",
+    "ground_truth_answer": "Gradient descent is generally attributed to Augustin-Louis Cauchy, who first suggested it in 1847.",
+    "source_doc": "wiki_gradient_descent.txt",
+    "evidence": [
+      "1847"
+    ]
+  },
+  {
+    "id": 33,
+    "type": "keyword",
+    "question": "Who developed the random forest algorithm extension and holds its trademark?",
+    "ground_truth_answer": "The extension of the algorithm was developed by Leo Breiman and Adele Cutler, who registered 'Random Forests' as a trademark.",
+    "source_doc": "wiki_random_forest.txt",
+    "evidence": [
+      "breiman"
+    ]
+  },
+  {
+    "id": 34,
+    "type": "semantic",
+    "question": "How does a random forest produce its prediction for classification and for regression tasks?",
+    "ground_truth_answer": "For classification the output is the class selected by most trees; for regression the output is the mean (average) prediction of the individual trees.",
+    "source_doc": "wiki_random_forest.txt",
+    "evidence": [
+      "most trees",
+      "average prediction"
+    ]
+  },
+  {
+    "id": 35,
+    "type": "keyword",
+    "question": "Which researcher introduced the neocognitron, an early architecture that inspired convolutional neural networks?",
+    "ground_truth_answer": "Kunihiko Fukushima introduced the neocognitron (around 1979-1980), an early architecture with convolutional and downsampling layers.",
+    "source_doc": "wiki_convolutional_neural_network.txt",
+    "evidence": [
+      "fukushima"
+    ]
+  },
+  {
+    "id": 36,
+    "type": "semantic",
+    "question": "What is the goal of an agent in reinforcement learning?",
+    "ground_truth_answer": "The agent learns to take actions in an environment so as to maximize the cumulative reward.",
+    "source_doc": "wiki_reinforcement_learning.txt",
+    "evidence": [
+      "cumulative reward"
+    ]
+  },
+  {
+    "id": 37,
+    "type": "semantic",
+    "question": "Which trade-off is central to reinforcement learning?",
+    "ground_truth_answer": "The trade-off between exploration (trying new actions) and exploitation (using current knowledge to get reward).",
+    "source_doc": "wiki_reinforcement_learning.txt",
+    "evidence": [
+      "exploration"
+    ]
+  },
+  {
+    "id": 38,
+    "type": "keyword",
+    "question": "Which 2017 paper introduced the Transformer architecture?",
+    "ground_truth_answer": "The Transformer was introduced in the 2017 paper 'Attention Is All You Need' by researchers at Google.",
+    "source_doc": [
+      "wiki_transformer_model.docx",
+      "attention_is_all_you_need.pdf"
+    ],
+    "evidence": [
+      "attention is all you need"
+    ]
+  },
+  {
+    "id": 39,
+    "type": "keyword",
+    "question": "Which mathematicians are credited with developing the original support vector machine algorithm?",
+    "ground_truth_answer": "The original SVM algorithm was invented by Vladimir Vapnik and Alexey Chervonenkis in 1964.",
+    "source_doc": "wiki_support_vector_machine.docx",
+    "evidence": [
+      "vapnik"
+    ]
+  },
+  {
+    "id": 40,
+    "type": "semantic",
+    "question": "What is the kernel trick in support vector machines?",
+    "ground_truth_answer": "The kernel trick lets an SVM perform non-linear classification by implicitly mapping inputs into a high-dimensional feature space through a kernel function, without computing the coordinates explicitly.",
+    "source_doc": "wiki_support_vector_machine.docx",
+    "evidence": [
+      "kernel trick"
+    ]
+  },
+  {
+    "id": 41,
+    "type": "semantic",
+    "question": "What does k-means clustering aim to do?",
+    "ground_truth_answer": "It partitions n observations into k clusters in which each observation belongs to the cluster with the nearest mean (centroid).",
+    "source_doc": "wiki_k_means_clustering.docx",
+    "evidence": [
+      "nearest mean"
+    ]
+  },
+  {
+    "id": 42,
+    "type": "keyword",
+    "question": "Which algorithm is the standard method for solving k-means clustering?",
+    "ground_truth_answer": "Lloyd's algorithm (naive k-means) is the standard algorithm: it alternates between assigning points to the nearest centroid and recomputing centroids.",
+    "source_doc": "wiki_k_means_clustering.docx",
+    "evidence": [
+      "lloyd"
+    ]
+  },
+  {
+    "id": 43,
+    "type": "semantic",
+    "question": "Which mathematical rule does backpropagation use to compute gradients layer by layer?",
+    "ground_truth_answer": "Backpropagation computes the gradient of the loss with respect to each weight using the chain rule, working backward from the output layer.",
+    "source_doc": "wiki_backpropagation.docx",
+    "evidence": [
+      "chain rule"
+    ]
+  },
+  {
+    "id": 44,
+    "type": "keyword",
+    "question": "Which researchers popularized backpropagation in 1986?",
+    "ground_truth_answer": "David Rumelhart, Geoffrey Hinton and Ronald Williams popularized backpropagation in 1986.",
+    "source_doc": "wiki_backpropagation.docx",
+    "evidence": [
+      "rumelhart"
+    ]
+  },
+  {
+    "id": 45,
+    "type": "semantic",
+    "question": "What is a word embedding?",
+    "ground_truth_answer": "A word embedding is a representation of a word, typically a real-valued vector, that encodes its meaning so that words closer in the vector space are expected to be similar in meaning.",
+    "source_doc": "wiki_word_embedding.docx",
+    "evidence": [
+      "real-valued vector"
+    ]
+  },
+  {
+    "id": 46,
+    "type": "semantic",
+    "question": "What problem are LSTM units designed to mitigate in recurrent neural networks?",
+    "ground_truth_answer": "LSTM units were designed to mitigate the vanishing gradient problem that makes it hard for plain RNNs to learn long-term dependencies.",
+    "source_doc": "wiki_recurrent_neural_network.docx",
+    "evidence": [
+      "vanishing gradient"
+    ]
+  },
+  {
+    "id": 47,
+    "type": "semantic",
+    "question": "What techniques are commonly used to reduce overfitting?",
+    "ground_truth_answer": "Common techniques include regularization, early stopping, cross-validation, and gathering more training data.",
+    "source_doc": "wiki_overfitting.txt",
+    "evidence": [
+      "regularization",
+      "early stopping"
+    ]
+  }
+]

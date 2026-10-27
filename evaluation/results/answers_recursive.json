@@ -1,0 +1,202 @@
+[
+  {
+    "strategy": "recursive",
+    "id": 1,
+    "question": "How many attention heads does the base Transformer model use, and what is the dimension of each head?",
+    "ground_truth": "The base Transformer uses h = 8 parallel attention heads, each with d_k = d_v = 64.",
+    "answer": "The Transformer model uses 8 parallel attention heads ($h = 8$) [source: attention_is_all_you_need.pdf, page 5]. The dimension of each head is $d_k = d_v = 64$ [source: attention_is_all_you_need.pdf, page 5].",
+    "judge_score": 1.0,
+    "judge_reason": "The system answer correctly identifies both the number of attention heads (8) and the dimension of each head (64).",
+    "similarity": 0.8322417736053467,
+    "abstained": 0.0,
+    "citation_correct": 1.0,
+    "citation_grounded": 1.0,
+    "contexts": [
+      {
+        "source": "attention_is_all_you_need.pdf",
+        "page": 5,
+        "rank": 1
+      },
+      {
+        "source": "attention_is_all_you_need.pdf",
+        "page": 5,
+        "rank": 2
+      },
+      {
+        "source": "wiki_transformer_model.docx",
+        "page": 10,
+        "rank": 3
+      },
+      {
+        "source": "attention_is_all_you_need.pdf",
+        "page": 9,
+        "rank": 4
+      },
+      {
+        "source": "wiki_transformer_model.docx",
+        "page": 10,
+        "rank": 5
+      }
+    ]
+  },
+  {
+    "strategy": "recursive",
+    "id": 2,
+    "question": "What BLEU score did the big Transformer reach on the WMT 2014 English-to-German translation task?",
+    "ground_truth": "The big Transformer reached 28.4 BLEU on WMT 2014 English-to-German, beating previous best results including ensembles by over 2 BLEU.",
+    "answer": "On the WMT 2014 English-to-German translation task, the big Transformer model achieved a BLEU score of 28.4 [source: attention_is_all_you_need.pdf, page 1, page 8].",
+    "judge_score": 1.0,
+    "judge_reason": "The system answer accurately provides the exact BLEU score of 28.4 requested by the question and present in the reference answer.",
+    "similarity": 0.8091471195220947,
+    "abstained": 0.0,
+    "citation_correct": 1.0,
+    "citation_grounded": 1.0,
+    "contexts": [
+      {
+        "source": "attention_is_all_you_need.pdf",
+        "page": 8,
+        "rank": 1
+      },
+      {
+        "source": "attention_is_all_you_need.pdf",
+        "page": 1,
+        "rank": 2
+      },
+      {
+        "source": "attention_is_all_you_need.pdf",
+        "page": 8,
+        "rank": 3
+      },
+      {
+        "source": "attention_is_all_you_need.pdf",
+        "page": 8,
+        "rank": 4
+      },
+      {
+        "source": "attention_is_all_you_need.pdf",
+        "page": 10,
+        "rank": 5
+      }
+    ]
+  },
+  {
+    "strategy": "recursive",
+    "id": 3,
+    "question": "How many warmup steps were used in the Transformer's learning rate schedule?",
+    "ground_truth": "The learning rate increased linearly for the first 4000 warmup steps and then decreased proportionally to the inverse square root of the step number.",
+    "answer": "In the Transformer's learning rate schedule, 4000 warmup steps were used [source: attention_is_all_you_need.pdf, page 7].",
+    "judge_score": 1.0,
+    "judge_reason": "The system answer correctly identifies the number of warmup steps as 4000, fully answering the question according to the reference.",
+    "similarity": 0.6954525709152222,
+    "abstained": 0.0,
+    "citation_correct": 1.0,
+    "citation_grounded": 1.0,
+    "contexts": [
+      {
+        "source": "wiki_transformer_model.docx",
+        "page": 4,
+        "rank": 1
+      },
+      {
+        "source": "lora.pdf",
+        "page": 21,
+        "rank": 2
+      },
+      {
+        "source": "attention_is_all_you_need.pdf",
+        "page": 7,
+        "rank": 3
+      },
+      {
+        "source": "lora.pdf",
+        "page": 20,
+        "rank": 4
+      },
+      {
+        "source": "lora.pdf",
+        "page": 18,
+        "rank": 5
+      }
+    ]
+  },
+  {
+    "strategy": "recursive",
+    "id": 4,
+    "question": "Why does the Transformer need positional encodings?",
+    "ground_truth": "Because the model has no recurrence or convolution, positional encodings (sine and cosine functions of different frequencies) inject information about the relative or absolute position of tokens in the sequence.",
+    "answer": "The Transformer needs positional encodings because self-attention alone is permutation-invariant, requiring positional information to be injected so that token order can affect the output [source: wiki_transformer_model.docx, page 1]. Positional encodings provide the model with information about where tokens are located within an input sequence, inducing a bias toward sequence order [source: wiki_transformer_model.docx, page 7].",
+    "judge_score": 1.0,
+    "judge_reason": "The system answer correctly explains that positional encodings are needed to inject sequence order information because self-attention is permutation-invariant.",
+    "similarity": 0.568977415561676,
+    "abstained": 0.0,
+    "citation_correct": 0.0,
+    "citation_grounded": 1.0,
+    "contexts": [
+      {
+        "source": "wiki_transformer_model.docx",
+        "page": 7,
+        "rank": 1
+      },
+      {
+        "source": "wiki_transformer_model.docx",
+        "page": 1,
+        "rank": 2
+      },
+      {
+        "source": "wiki_transformer_model.docx",
+        "page": 15,
+        "rank": 3
+      },
+      {
+        "source": "wiki_transformer_model.docx",
+        "page": 1,
+        "rank": 4
+      },
+      {
+        "source": "wiki_transformer_model.docx",
+        "page": 15,
+        "rank": 5
+      }
+    ]
+  },
+  {
+    "strategy": "recursive",
+    "id": 5,
+    "question": "How many layers are in the encoder stack of the base Transformer?",
+    "ground_truth": "The encoder is a stack of N = 6 identical layers, each with a multi-head self-attention sub-layer and a position-wise feed-forward sub-layer.",
+    "answer": "The encoder stack of the Transformer is composed of N = 6 identical layers [source: attention_is_all_you_need.pdf, page 3].",
+    "judge_score": 1.0,
+    "judge_reason": "The system answer correctly states the key fact that the encoder stack consists of 6 identical layers.",
+    "similarity": 0.7858092784881592,
+    "abstained": 0.0,
+    "citation_correct": 1.0,
+    "citation_grounded": 1.0,
+    "contexts": [
+      {
+        "source": "attention_is_all_you_need.pdf",
+        "page": 3,
+        "rank": 1
+      },
+      {
+        "source": "attention_is_all_you_need.pdf",
+        "page": 3,
+        "rank": 2
+      },
+      {
+        "source": "wiki_transformer_model.docx",
+        "page": 14,
+        "rank": 3
+      },
+      {
+        "source": "wiki_transformer_model.docx",
+        "page": 12,
+        "rank": 4
+      },
+      {
+        "source": "wiki_transformer_model.docx",
+        "page": 8,
+        "rank": 5
+      }
+    ]
+  }
+]
